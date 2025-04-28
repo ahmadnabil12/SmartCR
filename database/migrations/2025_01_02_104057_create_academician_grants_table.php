@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('academician_id')->constrained()->onDelete('cascade');
             $table->string('role'); //leader or member
             $table->timestamps();
-            //$table->engine = 'InnoDB';  // Ensure using InnoDB engine
         });
     }
 
