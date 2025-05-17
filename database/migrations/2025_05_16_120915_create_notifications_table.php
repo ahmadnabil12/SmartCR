@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('academician_grant', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('grant_id')->constrained()->onDelete('cascade');
-            $table->foreignId('academician_id')->constrained()->onDelete('cascade');
-            $table->string('role'); //leader or member
+            $table->string('message');
+            $table->string('type'); // CR Update, Assignment, etc.
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('change_request_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('academician_grant');
+        Schema::dropIfExists('notifications');
     }
 };

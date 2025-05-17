@@ -1,51 +1,51 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\AcademicianController;
-use App\Http\Controllers\GrantController;
-use App\Http\Controllers\MilestoneController;
+use App\Http\Controllers\ChangeRequestController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
-
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+Auth::routes(); // Default Laravel auth routes (register, login, etc.)
 
 Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-/*Route::middleware(['auth'])->get('/dashboard', function () {
-    return view('dashboard');
-});*/
+/*
+|--------------------------------------------------------------------------
+| Authenticated Routes (Logged-in users only)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->group(function () {
 
-Auth::routes();
+    // Dashboard route for logged-in users
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    // Change Request routes
+    Route::resource('change-requests', ChangeRequestController::class);
 
-Route::resource('academicians', AcademicianController::class);
-Route::resource('grants', GrantController::class);
-Route::resource('milestones', MilestoneController::class);
+    // User management (optional: restrict by role later)
+    Route::resource('users', UserController::class);
 
-Route::middleware(['can:AdminAcademicianStaff'])->group(function () {
-    // Admin routes to manage academicians
-    Route::resource('academicians', AcademicianController::class);
-    Route::resource('grants', GrantController::class);
-    Route::resource('milestones', MilestoneController::class);
+    // Test email sending
+    Route::get('/test-email', function () {
+        Mail::raw('This is a test email from SmartCR.', function ($message) {
+            $message->to('yourfriend@example.com') // 🔄 Change to a real email
+                    ->subject('SmartCR Test Email');
+        });
+
+        return '✅ Email sent!';
+    });
 });
-
-Route::get('/grants/{grant}', [GrantController::class, 'show'])->name('grants.show');
-
-/*Route::middleware(['auth'])->group(function () {
-    Route::get('/grants/{grant}', [GrantController::class, 'show'])
-        ->middleware('can:isMember,grant');
-
-    Route::get('/grants/{grant}/edit', [GrantController::class, 'edit'])
-        ->middleware('can:isLeader,grant');
-
-});*/
