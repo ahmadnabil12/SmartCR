@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChangeRequestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
@@ -21,7 +22,7 @@ Route::get('/', function () {
 
 Auth::routes(); // Default Laravel auth routes (register, login, etc.)
 
-Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+//Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,12 @@ Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name(
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
+
+    Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+
+    /*Route::get('/home', function () {
+        return view('home');
+    })->name('home')->middleware('auth');*/
 
     // Dashboard route for logged-in users
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
