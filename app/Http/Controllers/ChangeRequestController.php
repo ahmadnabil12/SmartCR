@@ -20,7 +20,7 @@ class ChangeRequestController extends Controller
     // Form to create CR
     public function create()
     {
-        $implementors = User::where('userCategory', 'implementor')->get(); // dropdown
+        $implementors = User::where('role', 'implementor')->get(); // dropdown
         return view('change_requests.create', compact('implementors'));
     }
 
