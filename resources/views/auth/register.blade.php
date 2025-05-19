@@ -59,6 +59,26 @@
                             </div>
                         </div>
 
+                        <!-- Unit dropdown (only shown if role is HOU) -->
+                        <div class="row mb-3" id="unitField" style="display: none;">
+                            <label for="unit" class="col-md-4 col-form-label text-md-end">{{ __('Unit') }}</label>
+
+                            <div class="col-md-6">
+                                <select id="unit" class="form-control @error('unit') is-invalid @enderror" name="unit">
+                                    <option value="">-- Select Unit --</option>
+                                    <option value="Logistics and Engineering (L&E)" {{ old('unit') == 'Logistics and Engineering (L&E)' ? 'selected' : '' }}>Logistics and Engineering (L&E)</option>
+                                    <option value="Delivery & Optimization (D&O)" {{ old('unit') == 'Delivery & Optimization (D&O)' ? 'selected' : '' }}>Delivery & Optimization (D&O)</option>
+                                    <option value="Finance" {{ old('unit') == 'Finance' ? 'selected' : '' }}>Finance</option>
+                                    <option value="Human Resource & Back End (HR)" {{ old('unit') == 'Human Resource & Back End (HR)' ? 'selected' : '' }}>Human Resource & Back End (HR)</option>
+                                </select>
+
+                                @error('unit')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="row mb-3">
                             <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
@@ -95,4 +115,25 @@
         </div>
     </div>
 </div>
+
+<!-- JS to show/hide unit field -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleSelect = document.getElementById('role');
+        const unitField = document.getElementById('unitField');
+
+        function toggleUnitField() {
+            if (roleSelect.value === 'hou') {
+                unitField.style.display = 'flex';
+                document.getElementById('unit').setAttribute('required', true);
+            } else {
+                unitField.style.display = 'none';
+                document.getElementById('unit').removeAttribute('required');
+            }
+        }
+
+        roleSelect.addEventListener('change', toggleUnitField);
+        toggleUnitField(); // run once in case of old input
+    });
+</script>
 @endsection

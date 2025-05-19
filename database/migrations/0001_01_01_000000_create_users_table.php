@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('role'); // requestor, implementor, hou, hod
+            $table->string('unit')->nullable(); // only  for HOU
             $table->string('password');
             $table->timestamps();
         });

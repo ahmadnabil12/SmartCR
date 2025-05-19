@@ -1,6 +1,10 @@
 @extends('layouts.admin')
 
 @section('content')
+@php
+    $user = Auth::user();
+@endphp
+
 <div class="container mt-5" style="background-color: #f4f6f9; color: #2c3e50; padding: 40px; border-radius: 10px;">
     <h1 class="text-center text-dark mb-4">Change Request Details</h1>
 
@@ -20,6 +24,7 @@
                 <div class="col-md-8"><p>{{ $changeRequest->unit }}</p></div>
             </div>
 
+
             <!-- Need By Date -->
             <div class="row mb-3">
                 <div class="col-md-4"><strong>Need By Date:</strong></div>
@@ -28,17 +33,19 @@
                 </div>
             </div>
 
-            <!-- Status -->
+            <!-- Status (only for implementor) -->
+            @if ($user->role === 'implementor')
             <div class="row mb-3">
                 <div class="col-md-4"><strong>Status:</strong></div>
                 <div class="col-md-8"><p>{{ $changeRequest->status }}</p></div>
             </div>
 
-            <!-- Complexity -->
+            <!-- Complexity (only for implementor) -->
             <div class="row mb-3">
                 <div class="col-md-4"><strong>Complexity:</strong></div>
                 <div class="col-md-8"><p>{{ $changeRequest->complexity ?? 'Not Assigned' }}</p></div>
             </div>
+            @endif
 
             <!-- Implementor -->
             <div class="row mb-3">

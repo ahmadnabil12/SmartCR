@@ -150,10 +150,10 @@
         <img class="img-profile rounded-circle" src="/img/user.png" style="margin-right: 20px;">
                 <span class="avatar avatar-sm" style="background-image: url(img/user.png"></span>
                 <div class="d-none d-xl-block ps-2">
-                <div>{{ Auth::user()->name }}</div> <!-- Dynamically display the logged-in user's name -->
-                <div class="mt-1 small text-secondary">{{ Auth::user()->userCategory }}</div>
-                <!--div class="mt-1 small text-secondary">UI Designer</div> < Add a role or designation if needed -->
+                    <div>{{ Auth::user()->name }}</div> <!-- Dynamically display the logged-in user's name -->
+                    <div class="mt-1 small text-secondary">{{ ucfirst(Auth::user()->role) }}</div> <!-- updated to use role -->
                 </div>
+
             </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

@@ -13,7 +13,19 @@ class ChangeRequestController extends Controller
     // Requestor views their CRs
     public function index()
     {
-        $changeRequests = ChangeRequest::where('requestor_id', Auth::id())->get();
+        $user = Auth::user();
+
+        if ($user->role === 'implementor') {
+            $changeRequests = ChangeRequest::where('implementor_id', $user->id)->get();
+        } elseif ($user->role === 'requestor') {
+            $changeRequests = ChangeRequest::where('requestor_id', $user->id)->get();
+        } elseif ($user->role === 'hou') {
+            $changeRequests = ChangeRequest::where('unit', $user->unit)->get();
+        } else {
+            // For HOU, HOD, or Admins — show all
+            $changeRequests = ChangeRequest::all();
+        }
+
         return view('change_requests.index', compact('changeRequests'));
     }
 

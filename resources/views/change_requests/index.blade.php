@@ -1,19 +1,23 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container mt-5" style="background-color: #f4f6f9; color: #2c3e50; padding: 20px; border-radius: 10px;">
+@php
+    $user = Auth::user();
+@endphp
+
+<div class="container mt-5" style="background-color: #f4f6f9; color: #2c3e50; padding: 20px; border-radius: 10px;">
 
     <!--Breadcrumb-->
     <div class="row">
-      <div class="col">
-        <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
-          <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Change Requests</li>
-          </ol>
-        </nav>
-      </div>
+        <div class="col">
+            <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Change Requests</li>
+                </ol>
+            </nav>
+        </div>
     </div>
 
     <div class="row mb-4">
@@ -36,9 +40,11 @@
     @endif
 
     <!-- Add New Change Request button (optional for requestor only) -->
-    <div class="mb-3">
-        <a href="{{ route('change-requests.create') }}" class="btn btn-success btn-lg" style="background-color: #28a745; border-color: #218838; color: white;">Submit New CR</a>
-    </div>
+    @if ($user->role === 'requestor')
+        <div class="mb-3">
+            <a href="{{ route('change-requests.create') }}" class="btn btn-success btn-lg" style="background-color: #28a745; border-color: #218838; color: white;">Submit New CR</a>
+        </div>
+    @endif
 
     <!-- Table to display change requests -->
     <div class="card shadow-sm" style="background-color: #ffffff; border-color: #ddd;">
@@ -49,8 +55,10 @@
                         <th>Title</th>
                         <th>Unit</th>
                         <th>Need By</th>
-                        <th>Status</th>
-                        <th>Complexity</th>
+                        @if ($user->role !== 'requestor')
+                            <th>Status</th>
+                            <th>Complexity</th>
+                        @endif
                         <th>Implementor</th>
                         <th>Actions</th>
                     </tr>
@@ -61,15 +69,16 @@
                             <td>{{ $cr->title }}</td>
                             <td>{{ $cr->unit }}</td>
                             <td>{{ \Carbon\Carbon::parse($cr->need_by_date)->format('d M, Y') }}</td>
-                            <td>{{ $cr->status }}</td>
-                            <td>{{ $cr->complexity ?? 'N/A' }}</td>
+                            @if ($user->role !== 'requestor')
+                                <td>{{ $cr->status }}</td>
+                                <td>{{ $cr->complexity ?? 'N/A' }}</td>
+                            @endif
                             <td>{{ $cr->implementor->name ?? 'Not Assigned' }}</td>
-
                             <td class="d-flex">
                                 <!-- View Button -->
                                 <a href="{{ route('change-requests.show', $cr->id) }}" class="btn btn-info btn-sm me-2" style="background-color: #17a2b8; border-color: #117a8b; color: white; margin-right: 5px;">View</a>
 
-                                <!-- Edit Button (optional for implementor) -->
+                                <!-- Edit Button -->
                                 <a href="{{ route('change-requests.edit', $cr->id) }}" class="btn btn-secondary btn-sm me-2" style="background-color: #007bff; border-color: #0069d9; color: white; margin-right: 5px;">Edit</a>
 
                                 <!-- Delete Button -->
@@ -82,7 +91,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center">No change requests available.</td>
+                            <td colspan="{{ $user->role !== 'requestor' ? 7 : 5 }}" class="text-center">No change requests available.</td>
                         </tr>
                     @endforelse
                 </tbody>

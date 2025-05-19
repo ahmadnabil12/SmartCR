@@ -25,7 +25,13 @@
 
             <div class="form-group mb-3">
                 <label for="unit" class="form-label">Unit</label>
-                <input type="text" class="form-control" id="unit" name="unit" required>
+                <select class="form-control" id="unit" name="unit" required>
+                    <option value="">-- Select Unit --</option>
+                    <option value="Logistics and Engineering (L&E)">Logistics and Engineering (L&E)</option>
+                    <option value="Delivery & Optimization (D&O)">Delivery & Optimization (D&O)</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Human Resource & Back End (HR)">Human Resource & Back End (HR)</option>
+                </select>
             </div>
 
             <div class="form-group mb-3">

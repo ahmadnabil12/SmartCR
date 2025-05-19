@@ -52,7 +52,8 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'role' => ['required', 'in:requestor,implementor,hou,hod'], // validate role
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'unit' => ['nullable', 'string', 'max:255'],
+            'password' => ['required', 'string', 'min:8', 'confirmed']
         ]);
     }
 
@@ -68,6 +69,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'role' => $data['role'], // store the role
+            'unit' => $data['unit'] ?? null, // only save unit for HOU
             'password' => Hash::make($data['password']),
         ]);
     }
