@@ -95,7 +95,6 @@
 </div>
 </div>
 
-
 <!-- Status Message Card (for requestor with no CRs) -->
 @if(auth()->user()->role === 'requestor' && $crCount == 0)
 <div class="row">
@@ -116,7 +115,7 @@
 </div>
 @endif
 
-<!-- Charts Row -->
+<!-- Charts Row 1 -->
 @if(in_array(auth()->user()->role, ['hod', 'hou', 'implementor']))
     @if((isset($statusChart) && $statusChart->isNotEmpty()) || (isset($complexityChart) && $complexityChart->isNotEmpty()))
     <div class="row">
@@ -151,27 +150,11 @@
     @endif
 @endif
 
-<!-- Completed vs Pending Chart -->
-@if(isset($completionChart) && $completionChart->isNotEmpty())
-<div class="row">
-    <div class="col-xl-6 mb-4">
-        <div class="card shadow">
-            <div class="card-header bg-warning text-white">
-                Completed vs Pending CRs
-            </div>
-            <div class="card-body">
-                <canvas id="completionPieChart"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-@endif
-
-
-<!-- CRs by Unit -->
-@if(auth()->user()->role === 'requestor' || auth()->user()->role === 'hod')
-    @if(isset($unitChart) && $unitChart->isNotEmpty())
-    <div class="row">
+<!-- Charts Row 2 -->
+<div class="row mb-4">
+    <!-- CRs by Unit – only for Requestor or HOD and when $unitChart has values -->
+    @if(in_array(auth()->user()->role, ['requestor','hod']) 
+        && isset($unitChart) && $unitChart->isNotEmpty())
         <div class="col-xl-6 mb-4">
             <div class="card shadow">
                 <div class="card-header bg-info text-white">
@@ -182,9 +165,23 @@
                 </div>
             </div>
         </div>
-    </div>
     @endif
-@endif
+
+    <!-- Completed vs Pending – for any role that has $completionChart -->
+    @if(isset($completionChart) && $completionChart->isNotEmpty())
+        <div class="col-xl-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-white">
+                    Completed vs Pending CRs
+                </div>
+                <div class="card-body">
+                    <canvas id="completionPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    @endif
+</div>
+
 
 <!-- About SmartCR -->
 <div class="row">

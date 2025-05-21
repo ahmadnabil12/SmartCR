@@ -114,4 +114,32 @@ class ChangeRequestController extends Controller
 
         return view('change_requests.my', compact('changeRequests'));
     }
+
+    public function pending()
+    {
+        $user = auth()->user();
+        $query = match($user->role) {
+            'requestor'    => ChangeRequest::where('requestor_id', $user->id),
+            'implementor'  => ChangeRequest::where('implementor_id', $user->id),
+            'hou'          => ChangeRequest::where('unit', $user->unit),
+            default        => ChangeRequest::query(),
+        };
+
+        $changeRequests = $query->where('status', '!=', 'Completed')->get();
+        return view('change_requests.index', compact('changeRequests'));
+    }
+
+    public function completed()
+    {
+        $user = auth()->user();
+        $query = match($user->role) {
+            'requestor'    => ChangeRequest::where('requestor_id', $user->id),
+            'implementor'  => ChangeRequest::where('implementor_id', $user->id),
+            'hou'          => ChangeRequest::where('unit', $user->unit),
+            default        => ChangeRequest::query(),
+        };
+
+        $changeRequests = $query->where('status', 'Completed')->get();
+        return view('change_requests.index', compact('changeRequests'));
+    }
 }

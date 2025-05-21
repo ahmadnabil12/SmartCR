@@ -33,12 +33,17 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
-    /*Route::get('/home', function () {
-        return view('home');
-    })->name('home')->middleware('auth');*/
-
     // Dashboard route for logged-in users
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+    // Pending & Completed filters
+    Route::get('change-requests/pending', [ChangeRequestController::class, 'pending'])
+    ->name('change-requests.pending')
+    ->middleware('auth');
+
+    Route::get('change-requests/completed', [ChangeRequestController::class, 'completed'])
+    ->name('change-requests.completed')
+    ->middleware('auth');
 
     // Change Request routes
     Route::resource('change-requests', ChangeRequestController::class);
@@ -53,6 +58,6 @@ Route::middleware(['auth'])->group(function () {
                     ->subject('SmartCR Test Email');
         });
 
-        return '✅ Email sent!';
+        return 'Email sent!';
     });
 });

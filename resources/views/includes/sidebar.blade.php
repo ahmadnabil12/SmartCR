@@ -30,10 +30,19 @@
 
     <!-- Nav Item - Change Requests -->
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('change-requests.index') }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCR"
+           aria-expanded="false" aria-controls="collapseCR">
             <i class="fas fa-fw fa-file-alt"></i>
             <span>Change Requests</span>
         </a>
+        <div id="collapseCR" class="collapse" aria-labelledby="headingCR" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">CR Management</h6>
+                <a class="collapse-item" href="{{ route('change-requests.index') }}">All CRs</a>
+                <a class="collapse-item" href="{{ route('change-requests.pending') }}">Pending CRs</a>
+                <a class="collapse-item" href="{{ route('change-requests.completed') }}">Completed CRs</a>
+            </div>
+        </div>
     </li>
 
     <!-- Nav Item - Users -->
