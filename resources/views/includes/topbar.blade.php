@@ -15,8 +15,8 @@
             aria-label="Search" aria-describedby="basic-addon2" disabled>
         <div class="input-group-append">
             <!-- Disabled button -->
-            <button class="btn btn-primary" type="button" disabled>
-                <i class="fas fa-search fa-sm"></i>
+            <button class="btn" type="button" disabled style="background-color: rgb(65, 172, 188); border-color: rgb(65, 172, 188); color: #fff;">
+                <i class="fas fa-search fa-sm"></i></i>
             </button>
         </div>
     </div>
