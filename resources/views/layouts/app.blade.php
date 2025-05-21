@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'RGMS') }}</title>
+    <title>{{ config('app.name', 'SmartCR') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -20,9 +20,9 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm">  <!-- Dark blue navbar -->
             <div class="container">
-                <!-- Change the brand name to RGMS -->
+                <!-- Change the brand name to SmartCR -->
                 <a class="navbar-brand text-light" href="{{ url('/') }}">
-                    RGMS
+                    SmartCR
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>

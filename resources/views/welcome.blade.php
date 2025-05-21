@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>RGMS</title>
+    <title>SmartCR</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito:400,600,700" rel="stylesheet">
 
@@ -11,13 +11,13 @@
     <style>
         body {
             font-family: 'Nunito', sans-serif;
-            background: #e3f2fd; /* Light blue background */
+            background: #e0f2f1;    /* Light teal background */
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            color: #1e88e5; /* Deep blue text color */
+            color: #00695c;          /* Darker teal text */
         }
 
         .container {
@@ -33,7 +33,7 @@
         h1 {
             font-size: 26px;
             margin-bottom: 20px;
-            color: #0d47a1; /* Darker blue for heading */
+            color: #004d40;          /* Deep teal for heading */
             font-weight: 600;
         }
 
@@ -50,35 +50,34 @@
         }
 
         .btn-primary {
-            background-color: #1976d2;
+            background-color: #009688;  /* Teal */
             color: white;
         }
 
         .btn-primary:hover {
-            background-color: #1565c0;
+            background-color: #00796b;  /* Darker teal */
         }
 
         .btn-secondary {
-            background-color: #42a5f5;
+            background-color: #4db6ac;  /* Lighter teal */
             color: white;
         }
 
         .btn-secondary:hover {
-            background-color: #1e88e5;
+            background-color: #26a69a;  /* Medium teal */
         }
 
         .btn-outline {
             background-color: white;
-            color: #2196f3;
-            border: 1px solid #2196f3;
+            color: #009688;             /* Teal border/text */
+            border: 1px solid #009688;
         }
 
         .btn-outline:hover {
-            background-color: #2196f3;
+            background-color: #009688;
             color: white;
         }
 
-        /* Optional - To add some margin between the logo and the title */
         .logo {
             max-width: 150px;
             margin-bottom: 20px;
@@ -90,7 +89,7 @@
         <!-- Logo Image -->
         <img src="/img/uniten_logo.png" alt="RGMS Logo" class="logo">
 
-        <h1>Welcome to Research Grant Management System</h1>
+        <h1>Welcome to SmartCR Management System</h1>
 
         @if (Route::has('login'))
             @auth
