@@ -106,6 +106,12 @@ class DashboardController extends Controller
             ->groupBy('completion_status')
             ->pluck('total', 'completion_status');
 
+        // CR List (5 most recent)
+        $recentCRs = (clone $base)
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
         // ——————————————————————————————
         // 5) RETURN VIEW
         // ——————————————————————————————
@@ -118,6 +124,7 @@ class DashboardController extends Controller
             'statusChart'     => $statusChart,
             'complexityChart' => $complexityChart,
             'completionChart' => $completionChart,
+            'recentCRs'      => $recentCRs,
         ]);
     }
 }

@@ -35,7 +35,6 @@
     };
 @endphp
 
-
 <div class="row">
     <!-- Change Request Count Card -->
     <div class="col-xl-4 col-md-6 mb-4">
@@ -93,6 +92,48 @@
         </div>
     </div>
     </div>
+</div>
+
+<!-- CR List Card -->
+<div class="row mb-4">
+  <div class="col-xl-12">
+    <div class="card shadow">
+      <div class="card-header bg-info text-white">
+        Recent CRs
+      </div>
+      <div class="card-body p-0">
+        @if($recentCRs->isEmpty())
+          <p class="text-center my-3">No recent CRs.</p>
+        @else
+          <ul class="list-group list-group-flush">
+            @foreach($recentCRs as $cr)
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ $cr->title }}</strong><br>
+                  <small class="text-muted">{{ $cr->created_at->format('d M, Y H:i') }}</small>
+                </div>
+                <div>
+                  <a href="{{ route('change-requests.show', $cr->id) }}"
+                     class="btn btn-sm btn-primary">
+                    View
+                  </a>
+                  @if(in_array(Auth::user()->role, ['hod','hou','implementor']))
+                    <a href="{{ route('change-requests.edit', $cr->id) }}"
+                       class="btn btn-sm btn-secondary">
+                      Edit
+                    </a>
+                  @endif
+                </div>
+              </li>
+            @endforeach
+          </ul>
+        @endif
+      </div>
+      <div class="card-footer text-center">
+        <a href="{{ route('change-requests.index') }}">See all CRs &rarr;</a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Status Message Card (for requestor with no CRs) -->
@@ -181,7 +222,6 @@
         </div>
     @endif
 </div>
-
 
 <!-- About SmartCR -->
 <div class="row">
