@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
 @endif
 
 <!-- Completed vs Pending Pie Chart -->
-@if(isset($complexityChart) && $complexityChart->isNotEmpty() && !(auth()->user()->role === 'requestor' && $crCount == 0))
+@if(isset($completionChart) && $completionChart->isNotEmpty() && !(auth()->user()->role === 'requestor' && $crCount == 0))
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const ctx4 = document.getElementById('completionPieChart')?.getContext('2d');
