@@ -151,7 +151,7 @@
                 <span class="avatar avatar-sm" style="background-image: url(img/user.png"></span>
                 <div class="d-none d-xl-block ps-2">
                     <div>{{ Auth::user()->name }}</div> <!-- Dynamically display the logged-in user's name -->
-                    <div class="mt-1 small text-secondary">{{ ucfirst(Auth::user()->role) }}</div> <!-- updated to use role -->
+                    <div class="mt-1 small text-secondary">{{ auth()->user()->role_label }}</div> <!-- updated to use role -->
                 </div>
 
             </a>

@@ -50,4 +50,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class);
     }
+
+    public function getRoleLabelAttribute()
+    {
+        return match($this->role) {
+        'requestor'   => 'Requestor',
+        'implementor' => 'Implementor',
+        'hou'         => 'Head Of Unit (HOU)',
+        'hod'         => 'Head Of Department (HOD)',
+        default       => ucfirst($this->role),
+        };
+    }
 }

@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in as') }} <strong>{{ ucfirst(auth()->user()->role) }}</strong>!
+                    {{ __('You are logged in as') }} <strong>{{ auth()->user()->role_label }}</strong>!
                 </div>
             </div>
         </div>

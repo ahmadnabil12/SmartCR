@@ -55,7 +55,7 @@
                         <th>Title</th>
                         <th>Unit</th>
                         <th>Need By</th>
-                        @if ($user->role !== 'requestor')
+                        @if (in_array($user->role, ['implementor', 'hou', 'hod']))
                             <th>Status</th>
                             <th>Complexity</th>
                         @endif

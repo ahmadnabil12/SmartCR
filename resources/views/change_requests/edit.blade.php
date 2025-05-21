@@ -47,7 +47,7 @@
         </div>
 
         <!-- Only for implementor -->
-        @if ($user->role === 'implementor')
+        @if (in_array($user->role, ['implementor', 'hou', 'hod']))
             <div class="form-group mb-3">
                 <label for="status" class="form-label">Status</label>
                 <select class="form-control" id="status" name="status" required>

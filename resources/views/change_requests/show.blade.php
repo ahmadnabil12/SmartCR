@@ -34,7 +34,7 @@
             </div>
 
             <!-- Status (only for implementor) -->
-            @if ($user->role === 'implementor')
+            @if (in_array($user->role, ['implementor', 'hou', 'hod']))
             <div class="row mb-3">
                 <div class="col-md-4"><strong>Status:</strong></div>
                 <div class="col-md-8"><p>{{ $changeRequest->status }}</p></div>

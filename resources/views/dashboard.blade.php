@@ -19,7 +19,7 @@
         <div class="card shadow">
             <div class="card-body">
                 <h4 class="text-primary">Welcome, {{ auth()->user()->name }}!</h4>
-                <p class="mb-0">You are logged in as <strong>{{ ucfirst(auth()->user()->role) }}</strong>.</p>
+                <p class="mb-0">You are logged in as <strong>{{ auth()->user()->role_label }}</strong>.</p>
             </div>
         </div>
     </div>
@@ -216,17 +216,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 2) center-text plugin (unchanged)
     const centerTextPlugin = {
-        id: 'centerText',
-        beforeDraw: (chart) => {
-            const { width, height, ctx } = chart;
-            ctx.save();
-            ctx.font = `20px Nunito, sans-serif`;
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#333';
+    id: 'centerText',
+        beforeDraw(chart) {
+            const { ctx, chartArea: { left, right, top, bottom } } = chart;
+            const centerX = (left + right) / 2;
+            const centerY = (top + bottom) / 2;
             const text = `Total CR: ${totalCR}`;
-            const textX = Math.round((width - ctx.measureText(text).width) / 2);
-            const textY = height / 2;
-            ctx.fillText(text, textX, textY);
+
+            ctx.save();
+            ctx.font         = '20px Nunito, sans-serif';
+            ctx.fillStyle    = '#333';
+            ctx.textAlign    = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, centerX, centerY);
             ctx.restore();
         }
     };
