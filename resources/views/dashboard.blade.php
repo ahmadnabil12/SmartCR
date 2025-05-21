@@ -208,13 +208,17 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const ctx = document.getElementById('statusDoughnutChart')?.getContext('2d');
-    const statusData = {!! json_encode($statusChart->values()) !!};
-    const totalCR = statusData.reduce((a, b) => a + b, 0);
 
+    // 1) pull labels & data from Blade
+    const statusLabels = {!! json_encode($statusChart->keys()) !!};
+    const statusData   = {!! json_encode($statusChart->values()) !!};
+    const totalCR      = statusData.reduce((a, b) => a + b, 0);
+
+    // 2) center-text plugin (unchanged)
     const centerTextPlugin = {
         id: 'centerText',
         beforeDraw: (chart) => {
-            const {width, height, ctx} = chart;
+            const { width, height, ctx } = chart;
             ctx.save();
             ctx.font = `20px Nunito, sans-serif`;
             ctx.textBaseline = 'middle';
@@ -227,14 +231,37 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    // 3) explicit color map (add or adjust statuses as needed)
+    const statusColorMap = {
+        'Requirement Gathering':   '#007bff',
+        'Feasibility Study':       '#6c757d',
+        'SOW Preparation':   '#17a2b8',
+        'SOW Sign Off': '#ffc107',
+        'Quotation Preparation':     '#fd7e14',
+        'Quotation Sign Off':    '#20c997',
+        'Development Plan':    '#dc3545',
+        'Development':     '#6f42c1',
+        'SIT':   '#e83e8c',
+        'UAT':     '#343a40',
+        'UAT Sign Off':      '#6610f2',
+        'Deployment':    '#f8f9fa',
+        'Completed':   '#28a745',
+    };
+
+    // 4) build the backgroundColor array in label-order
+    const backgroundColor = statusLabels.map(label =>
+        statusColorMap[label] ?? '#cccccc'  // fallback grey if you ever add a new status
+    );
+
+    // 5) render the doughnut
     if (ctx) {
         new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: {!! json_encode($statusChart->keys()) !!},
+                labels: statusLabels,
                 datasets: [{
                     data: statusData,
-                    backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1', '#17a2b8', '#fd7e14'],
+                    backgroundColor,
                     borderColor: '#fff',
                     borderWidth: 1
                 }]
@@ -243,13 +270,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 responsive: true,
                 plugins: {
                     legend: { position: 'bottom' },
-                    title: { display: true, text: 'Change Request Status Distribution' },
+                    /*title: {
+                        display: true,
+                        text: 'Change Request Status Distribution'
+                    },*/
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
-                                const value = context.raw;
-                                const percentage = ((value / totalCR) * 100).toFixed(1);
-                                return `${context.label}: ${value} (${percentage}%)`;
+                            label: ctx => {
+                                const v = ctx.raw;
+                                const pct = ((v / totalCR) * 100).toFixed(1);
+                                return `${ctx.label}: ${v} (${pct}%)`;
                             }
                         }
                     }
@@ -294,10 +324,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 responsive: true,
                 plugins: {
                     legend: { display: false },
-                    title: {
+                    /*title: {
                         display: true,
                         text: 'Change Request Complexity Distribution'
-                    },
+                    },*/
                     tooltip: {
                         callbacks: {
                             label: function (context) {
@@ -312,48 +342,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     x: {
                         beginAtZero: true,
                         precision: 0
-                    }
-                }
-            }
-        });
-    }
-});
-</script>
-@endif
-
-<!-- Completed vs Pending Pie Chart -->
-@if(isset($completionChart) && $completionChart->isNotEmpty() && !(auth()->user()->role === 'requestor' && $crCount == 0))
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const ctx4 = document.getElementById('completionPieChart')?.getContext('2d');
-    const completionData = {!! json_encode($completionChart->values()) !!};
-    const total = completionData.reduce((a, b) => a + b, 0);
-
-    if (ctx4) {
-        new Chart(ctx4, {
-            type: 'pie',
-            data: {
-                labels: {!! json_encode($completionChart->keys()) !!},
-                datasets: [{
-                    data: completionData,
-                    backgroundColor: ['#28a745', '#ffc107'],
-                    borderColor: '#fff',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'bottom' },
-                    title: { display: true, text: 'Completed vs Pending CRs' },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const value = context.raw;
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return `${context.label}: ${value} (${percentage}%)`;
-                            }
-                        }
                     }
                 }
             }
@@ -386,10 +374,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 responsive: true,
                 plugins: {
                     legend: { display: false },
-                    title: {
+                    /*title: {
                         display: true,
                         text: 'CRs by Unit'
-                    },
+                    },*/
                     tooltip: {
                         callbacks: {
                             label: function(context) {
@@ -420,6 +408,42 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+});
+</script>
+@endif
+
+<!-- Completed vs Pending Pie Chart -->
+@if(isset($completionChart) && $completionChart->isNotEmpty() && !(auth()->user()->role === 'requestor' && $crCount == 0))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const ctx = document.getElementById('completionPieChart')?.getContext('2d');
+  const raw = {!! json_encode($completionChart) !!};
+  const labels = ['Pending','Completed'];
+  const data = labels.map(l => raw[l] ?? 0);
+  const backgroundColor = ['#ffc107','#28a745'];
+
+  if (ctx) {
+    new Chart(ctx, {
+      type: 'pie',
+      data: { labels, datasets: [{ data, backgroundColor, borderColor: '#fff', borderWidth: 1 }] },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' },
+          //title: { display: true }, text: 'Completed vs Pending CRs' },
+          tooltip: {
+            callbacks: {
+              label: ctx => {
+                const v = ctx.raw;
+                const pct = ((v / data.reduce((a,b)=>a+b,0))*100).toFixed(1);
+                return `${ctx.label}: ${v} (${pct}%)`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
 });
 </script>
 @endif

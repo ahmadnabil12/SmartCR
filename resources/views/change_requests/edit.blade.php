@@ -54,8 +54,13 @@
                     <option value="Requirement Gathering" {{ $changeRequest->status == 'Requirement Gathering' ? 'selected' : '' }}>Requirement Gathering</option>
                     <option value="Feasibility Study" {{ $changeRequest->status == 'Feasibility Study' ? 'selected' : '' }}>Feasibility Study</option>
                     <option value="SOW Preparation" {{ $changeRequest->status == 'SOW Preparation' ? 'selected' : '' }}>SOW Preparation</option>
+                    <option value="SOW Sign Off" {{ $changeRequest->status == 'SOW Sign Off' ? 'selected' : '' }}>SOW Sign Off</option>
+                    <option value="Quotation Preparation" {{ $changeRequest->status == 'Quotation Preparation' ? 'selected' : '' }}>Quotation Preparation</option>
+                    <option value="Quotation Sign Off" {{ $changeRequest->status == 'Quotation Sign Off' ? 'selected' : '' }}>Quotation Sign Off</option>
+                    <option value="Development Plan" {{ $changeRequest->status == 'Development Plan' ? 'selected' : '' }}>Development Plan</option>
                     <option value="Development" {{ $changeRequest->status == 'Development' ? 'selected' : '' }}>Development</option>
                     <option value="UAT" {{ $changeRequest->status == 'UAT' ? 'selected' : '' }}>UAT</option>
+                    <option value="UAT Sign Off" {{ $changeRequest->status == 'UAT Sign Off' ? 'selected' : '' }}>UAT Sign Off</option>
                     <option value="Deployment" {{ $changeRequest->status == 'Deployment' ? 'selected' : '' }}>Deployment</option>
                     <option value="Completed" {{ $changeRequest->status == 'Completed' ? 'selected' : '' }}>Completed</option>
                 </select>
