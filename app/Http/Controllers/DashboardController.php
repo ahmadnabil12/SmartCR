@@ -19,6 +19,12 @@ class DashboardController extends Controller
         // Role-based data setup
         if ($user->role === 'requestor') {
             $crCount = ChangeRequest::where('requestor_id', $user->id)->count();
+            $pendingCount = ChangeRequest::where('requestor_id', $user->id)
+                ->where('status', '!=', 'Completed')
+                ->count(); // Calculate pending CRs
+            $completedCount = ChangeRequest::where('requestor_id', $user->id)
+                ->where('status', 'Completed')
+                ->count(); // Calculate completed CRs
             $label = 'Your Submitted CRs';
 
             // CRs grouped by unit for this requestor
@@ -29,14 +35,28 @@ class DashboardController extends Controller
 
         } elseif ($user->role === 'implementor') {
             $crCount = ChangeRequest::where('implementor_id', $user->id)->count();
+            $pendingCount = ChangeRequest::where('implementor_id', $user->id)
+                ->where('status', '!=', 'Completed')
+                ->count(); // Calculate pending CRs
+            $completedCount = ChangeRequest::where('implementor_id', $user->id)
+                ->where('status', 'Completed')
+                ->count(); // Calculate completed CRs
             $label = 'Assigned CRs';
 
         } elseif ($user->role === 'hou') {
             $crCount = ChangeRequest::where('unit', $user->unit)->count();
+            $pendingCount = ChangeRequest::where('unit', $user->unit)
+                ->where('status', '!=', 'Completed')
+                ->count(); // Calculate pending CRs
+            $completedCount = ChangeRequest::where('unit', $user->unit)
+                ->where('status', 'Completed')
+                ->count(); // Calculate completed CRs
             $label = 'Unit CRs (' . $user->unit . ')';
 
         } else { // HOD
             $crCount = ChangeRequest::count();
+            $pendingCount = ChangeRequest::where('status', '!=', 'Completed')->count(); // Calculate pending CRs
+            $completedCount = ChangeRequest::where('status', 'Completed')->count(); // Calculate completed CRs
             $label = 'Total Change Requests';
 
             // CRs grouped by unit (for all users)
@@ -78,11 +98,13 @@ class DashboardController extends Controller
 
         return view('dashboard', [
             'crCount' => $crCount,
+            'pendingCount' => $pendingCount, // Pass pending count to the view
+            'completedCount' => $completedCount, // Pass completed count to the view
             'label' => $label,
             'statusChart' => $statusChart,
             'complexityChart' => $complexityChart,
             'unitChart' => $unitChart,              
-            'completionChart' => $completionChart 
+            'completionChart' => $completionChart,
         ]);
     }
 }
