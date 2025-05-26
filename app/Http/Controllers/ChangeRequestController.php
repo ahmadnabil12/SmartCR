@@ -3,28 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\ChangeRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewCRAssigned;
 
 class ChangeRequestController extends Controller
 {
     // Requestor views their CRs
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
 
-        if ($user->role === 'implementor') {
-            $changeRequests = ChangeRequest::where('implementor_id', $user->id)->get();
-        } elseif ($user->role === 'requestor') {
-            $changeRequests = ChangeRequest::where('requestor_id', $user->id)->get();
-        } elseif ($user->role === 'hou') {
-            $changeRequests = ChangeRequest::where('unit', $user->unit)->get();
-        } else {
-            // For HOU, HOD, or Admins — show all
-            $changeRequests = ChangeRequest::all();
+        // 1) build your “base” query depending on role:
+        $query = match($user->role) {
+            'implementor' => ChangeRequest::where('implementor_id', $user->id),
+            'requestor'   => ChangeRequest::where('requestor_id', $user->id),
+            'hou'         => ChangeRequest::where('unit', $user->unit),
+            default       => ChangeRequest::query(),
+        };
+
+        // 2) if the user passed ?q=foo, add a WHERE title LIKE '%foo%'
+        if ($request->filled('q')) {
+            $searchTerm = '%'.$request->q.'%';
+            $query->where('title', 'like', $searchTerm);
         }
+
+        // 3) finally execute
+        $changeRequests = $query->get();
 
         return view('change_requests.index', compact('changeRequests'));
     }

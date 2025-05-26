@@ -39,6 +39,58 @@
         </div>
     @endif
 
+    <form action="{{ route('change-requests.index') }}" method="GET" class="mb-4">
+    <div class="input-group search-bar">
+        <input
+        type="text"
+        name="q"
+        value="{{ request('q') }}"
+        class="form-control search-bar__input"
+        placeholder="Search CRs by title…"
+        aria-label="Search CRs by title"
+        >
+        <button class="btn search-bar__btn" type="submit" aria-label="Submit search">
+        <i class="fas fa-search"></i>
+        </button>
+    </div>
+    </form>
+
+    <style>
+    .search-bar {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    .search-bar__input {
+        border-radius: 50px 0 0 50px;
+        border: 2px solid #ccc;
+        transition: border-color .3s, box-shadow .3s;
+    }
+    .search-bar__btn {
+        border-radius: 0 50px 50px 0;
+        border: 2px solid #ccc;
+        border-left: none;
+        background: #fff;
+        transition: background .3s, border-color .3s, color .3s;
+        color: #6c757d;
+    }
+    .search-bar__input:focus,
+    .search-bar__input:hover {
+        border-color: #20c997;
+        box-shadow: 0 0 8px rgba(32, 201, 151, .4);
+        outline: none;
+    }
+    .search-bar__btn:hover,
+    .search-bar__btn:focus {
+        background: #20c997;
+        border-color: #20c997;
+        color: #fff;
+    }
+    /* Make sure the icon stays vertically centered */
+    .search-bar__btn i {
+        line-height: 1;
+    }
+    </style>
+
     <!-- Add New Change Request button (optional for requestor only) -->
     @if ($user->role === 'requestor')
         <div class="mb-3">
@@ -50,7 +102,7 @@
     <div class="card shadow-sm" style="background-color: #ffffff; border-color: #ddd;">
         <div class="card-body">
             <table class="table table-hover table-bordered table-striped" style="background-color: #f9f9f9; color: #2c3e50;">
-                <thead class="bg-primary text-white">
+                <thead class="bg-info text-white">
                     <tr>
                         <th>Title</th>
                         <th>Unit</th>
@@ -76,10 +128,10 @@
                             <td>{{ $cr->implementor->name ?? 'Not Assigned' }}</td>
                             <td class="d-flex">
                                 <!-- View Button -->
-                                <a href="{{ route('change-requests.show', $cr->id) }}" class="btn btn-info btn-sm me-2" style="background-color: #17a2b8; border-color: #117a8b; color: white; margin-right: 5px;">View</a>
-
+                                <a href="{{ route('change-requests.show', $cr->id) }}" class="btn btn-info btn-sm me-2"  style="background-color:rgb(4, 113, 229); border-color: #0069d9; color: white; margin-right: 5px;">View</a>
+                                                    
                                 <!-- Edit Button -->
-                                <a href="{{ route('change-requests.edit', $cr->id) }}" class="btn btn-secondary btn-sm me-2" style="background-color: #007bff; border-color: #0069d9; color: white; margin-right: 5px;">Edit</a>
+                                <a href="{{ route('change-requests.edit', $cr->id) }}" class="btn btn-secondary btn-sm me-2" style="background-color:rgb(131, 147, 148); border-color:rgb(94, 103, 104); color: white; margin-right: 5px;">Edit</a>
 
                                 <!-- Delete Button -->
                                 <form action="{{ route('change-requests.destroy', $cr->id) }}" method="POST" style="display:inline;">
