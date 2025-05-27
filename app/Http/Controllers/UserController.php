@@ -9,9 +9,27 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     // Show all users (admin only)
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $query = User::query();
+
+        // 1. keep the role filter you already have
+        if ($role = $request->query('role')) {
+            $query->where('role', $role);
+        }
+
+        // 2. new: apply a name/email search
+        if ($search = $request->query('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // 3. paginate (or ->get())
+        $users = $query->paginate(20)
+                    ->appends($request->only(['role','search']));
+
         return view('users.index', compact('users'));
     }
 

@@ -48,10 +48,33 @@
     <!-- Nav Item - Users -->
     @if(auth()->user()->role === 'admin')
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('users.index') }}">
-                <i class="fas fa-fw fa-users"></i>
+            <a class="nav-link collapsed" href="#" 
+                data-toggle="collapse" data-target="#collapseUsers" 
+                aria-expanded="false" aria-controls="collapseUsers">
+                <i class="fas fa-users"></i>
                 <span>Users</span>
             </a>
+            <div id="collapseUsers" class="collapse" 
+                aria-labelledby="headingUsers" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">By Role:</h6>
+                <a class="collapse-item" href="{{ route('users.index') }}">
+                    All Users
+                </a>
+                <a class="collapse-item" href="{{ route('users.index', ['role'=>'requestor']) }}">
+                    Requestor
+                </a>
+                <a class="collapse-item" href="{{ route('users.index', ['role'=>'implementor']) }}">
+                    Implementor
+                </a>
+                <a class="collapse-item" href="{{ route('users.index', ['role'=>'hou']) }}">
+                    HOU
+                </a>
+                <a class="collapse-item" href="{{ route('users.index', ['role'=>'hod']) }}">
+                    HOD
+                </a>
+                </div>
+            </div>
         </li>
     @endif
 
