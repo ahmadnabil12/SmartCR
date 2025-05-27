@@ -20,9 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Auth::routes(); // Default Laravel auth routes (register, login, etc.)
-
-//Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+Auth::routes(['register' => false]); // Users cannot register themselves
 
 /*
 |--------------------------------------------------------------------------

@@ -77,4 +77,15 @@ class UserController extends Controller
         $user->delete();
         return back()->with('success', 'User deleted.');
     }
+
+    // Restrict access to admin users only
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (auth()->user()->role !== 'admin') {
+                abort(403, 'Unauthorized');
+            }
+            return $next($request);
+        });
+    }
 }
