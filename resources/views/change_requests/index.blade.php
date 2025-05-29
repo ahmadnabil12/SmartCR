@@ -5,150 +5,155 @@
     $user = Auth::user();
 @endphp
 
-<div class="container mt-5" style="background-color: #f4f6f9; color: #2c3e50; padding: 20px; border-radius: 10px;">
+<style>
+    .teal-table th, .teal-table td { vertical-align: middle; }
+    .btn-wow { background:#41acbc; border:none; color:#fff; border-radius:8px; }
+    .btn-wow:hover { background:#338fa1; }
+    .btn-edit { background:#ffc107; color:#333; border:none; border-radius:8px; }
+    .btn-edit:hover { background:#e6a800; }
+    .btn-delete { background:#e74c3c; color:#fff; border:none; border-radius:8px; }
+    .btn-delete:hover { background:#b92d14; }
 
-    <!--Breadcrumb-->
-    <div class="row">
-        <div class="col">
-            <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Change Requests</li>
-                </ol>
-            </nav>
-        </div>
+    /* 1) Pill wrapper */
+    .search-bar {
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 1rem;
+      border: 1px solid #ccc;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    /* 2) Remove inner borders/shadows on the input */
+    .search-bar__input {
+    border: none !important;
+    box-shadow: none !important;
+    }
+
+    /* 3) Style the search button cleanly */
+    .search-bar__btn {
+    border: none !important;
+    background: transparent !important;
+    color: #666;
+    padding: 0 16px;
+    }
+
+    /* 4) Subtle hover effect */
+    .search-bar__btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    }
+</style>
+
+<!-- Breadcrumb -->
+<div class="row">
+    <div class="col">
+        <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('welcome') }}" style="color: #41acbc; font-weight: 500;">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('dashboard') }}" style="color: #41acbc; font-weight: 500;">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: #888;">
+                    Change Requests
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container mt-1">
+  <div class="card p-4"
+       style="border-radius: 1.2rem;
+              box-shadow: 0 8px 40px rgba(65,172,188,0.13);
+              border: 2px solid #d4f3f8;">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="fw-bold" style="color: #41acbc;">List of Change Requests</h3>
+
+      <!-- Submit New CR button only for requestors -->
+      @if ($user->role === 'requestor')
+        <a href="{{ route('change-requests.create') }}"
+           class="btn btn-wow">
+          <i class="fas fa-plus me-1"></i> Submit New CR
+        </a>
+      @endif
     </div>
 
-    <div class="row mb-4">
-        <div class="col">
-            <h1 class="text-center text-dark">List of Change Requests</h1>
-        </div>
-    </div>
-
-    <!-- Display success or error messages -->
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert" style="background-color: #28a745; border-color: #218838; color: white;">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @elseif(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #dc3545; border-color: #c82333; color: white;">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
+    <!-- Search Bar -->
     <form action="{{ route('change-requests.index') }}" method="GET" class="mb-4">
-    <div class="input-group search-bar">
-        <input
-        type="text"
-        name="q"
-        value="{{ request('q') }}"
-        class="form-control search-bar__input"
-        placeholder="Search CRs by title…"
-        aria-label="Search CRs by title"
-        >
-        <button class="btn search-bar__btn" type="submit" aria-label="Submit search">
-        <i class="fas fa-search"></i>
-        </button>
-    </div>
+        <div class="input-group search-bar">
+            <input
+            type="text"
+            name="q"
+            value="{{ request('q') }}"
+            class="form-control"
+            placeholder="Search users by CR Title…"
+            >
+            <div class="input-group-append">
+            <button class="btn" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+            </div>
+        </div>
     </form>
 
-    <style>
-    .search-bar {
-        max-width: 500px;
-        margin: 0 auto;
-    }
-    .search-bar__input {
-        border-radius: 50px 0 0 50px;
-        border: 2px solid #ccc;
-        transition: border-color .3s, box-shadow .3s;
-    }
-    .search-bar__btn {
-        border-radius: 0 50px 50px 0;
-        border: 2px solid #ccc;
-        border-left: none;
-        background: #fff;
-        transition: background .3s, border-color .3s, color .3s;
-        color: #6c757d;
-    }
-    .search-bar__input:focus,
-    .search-bar__input:hover {
-        border-color: #20c997;
-        box-shadow: 0 0 8px rgba(32, 201, 151, .4);
-        outline: none;
-    }
-    .search-bar__btn:hover,
-    .search-bar__btn:focus {
-        background: #20c997;
-        border-color: #20c997;
-        color: #fff;
-    }
-    /* Make sure the icon stays vertically centered */
-    .search-bar__btn i {
-        line-height: 1;
-    }
-    </style>
+    <table class="table table-hover table-striped teal-table">
+      <thead style="background: #41acbc;" class="text-white">
+        <tr>
+          <th>Title</th>
+          <th>Unit</th>
+          <th>Need By</th>
+          @if (in_array($user->role, ['implementor','hou','hod','admin']))
+            <th>Status</th>
+            <th>Complexity</th>
+          @endif
+          <th>Implementor</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse($changeRequests as $cr)
+        <tr>
+          <td>{{ $cr->title }}</td>
+          <td>{{ $cr->unit }}</td>
+          <td>{{ \Carbon\Carbon::parse($cr->need_by_date)->format('d M, Y') }}</td>
 
-    <!-- Add New Change Request button (optional for requestor only) -->
-    @if ($user->role === 'requestor')
-        <div class="mb-3">
-            <a href="{{ route('change-requests.create') }}" class="btn btn-success btn-lg" style="background-color: #28a745; border-color: #218838; color: white;">Submit New CR</a>
-        </div>
-    @endif
+          @if($user->role !== 'requestor')
+            <td>{{ $cr->status }}</td>
+            <td>{{ $cr->complexity ?? 'N/A' }}</td>
+          @endif
 
-    <!-- Table to display change requests -->
-    <div class="card shadow-sm" style="background-color: #ffffff; border-color: #ddd;">
-        <div class="card-body">
-            <table class="table table-hover table-bordered table-striped" style="background-color: #f9f9f9; color: #2c3e50;">
-                <thead class="bg-info text-white">
-                    <tr>
-                        <th>Title</th>
-                        <th>Unit</th>
-                        <th>Need By</th>
-                        @if (in_array($user->role, ['implementor', 'hou', 'hod', 'admin']))
-                            <th>Status</th>
-                            <th>Complexity</th>
-                        @endif
-                        <th>Implementor</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($changeRequests as $cr)
-                        <tr>
-                            <td>{{ $cr->title }}</td>
-                            <td>{{ $cr->unit }}</td>
-                            <td>{{ \Carbon\Carbon::parse($cr->need_by_date)->format('d M, Y') }}</td>
-                            @if ($user->role !== 'requestor')
-                                <td>{{ $cr->status }}</td>
-                                <td>{{ $cr->complexity ?? 'N/A' }}</td>
-                            @endif
-                            <td>{{ $cr->implementor->name ?? 'Not Assigned' }}</td>
-                            <td class="d-flex">
-                                <!-- View Button -->
-                                <a href="{{ route('change-requests.show', $cr->id) }}" class="btn btn-info btn-sm me-2"  style="background-color:rgb(4, 113, 229); border-color: #0069d9; color: white; margin-right: 5px;">View</a>
-                                                    
-                                <!-- Edit Button -->
-                                <a href="{{ route('change-requests.edit', $cr->id) }}" class="btn btn-secondary btn-sm me-2" style="background-color:rgb(131, 147, 148); border-color:rgb(94, 103, 104); color: white; margin-right: 5px;">Edit</a>
+          <td>{{ $cr->implementor->name ?? 'Not Assigned' }}</td>
+          <td class="d-flex align-items-center gap-2">
+            <a href="{{ route('change-requests.show',   $cr->id) }}" class="btn btn-wow btn-sm" style="margin-right: 5px;"><i class="fas fa-eye"></i></a>
+            <a href="{{ route('change-requests.edit',   $cr->id) }}" class="btn btn-edit btn-sm" style="margin-right: 5px;"><i class="fas fa-edit"></i></a>
+            <form action="{{ route('change-requests.destroy', $cr->id) }}"
+                  method="POST" style="display:inline;">
+              @csrf @method('DELETE')
+              <button type="submit"
+                      class="btn btn-delete btn-sm me-1"
+                      onclick="return confirm('Delete this CR?');">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+        @empty
+        <tr>
+          <td colspan="{{ in_array($user->role,['implementor','hou','hod','admin']) ? 7 : 5 }}"
+              class="text-center text-muted">
+            No change requests available.
+          </td>
+        </tr>
+        @endforelse
+      </tbody>
+    </table>
 
-                                <!-- Delete Button -->
-                                <form action="{{ route('change-requests.destroy', $cr->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" style="background-color: #e74c3c; border-color: #c0392b; margin-right: 5px;">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="{{ $user->role !== 'requestor' ? 7 : 5 }}" class="text-center">No change requests available.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
 </div>
 @endsection

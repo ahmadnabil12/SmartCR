@@ -5,73 +5,75 @@
     $user = Auth::user();
 @endphp
 
-<div class="container mt-5" style="background-color: #f4f6f9; color: #2c3e50; padding: 40px; border-radius: 10px;">
-    <h1 class="text-center text-dark mb-4">Change Request Details</h1>
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card"
+         style="border-radius:1.5rem;
+                box-shadow:0 4px 32px #41acbc33;
+                border:2px solid #d4f3f8;
+                max-width: 440px;">
+        <div class="card-body text-center">
 
-    <!-- CR Details Card -->
-    <div class="card shadow-sm" style="background-color: #ffffff; border-radius: 10px;">
-        <div class="card-body">
+            <!-- CR Icon -->
+            <i class="fas fa-file-alt" style="font-size:4rem; color:#41acbc;"></i>
 
-            <!-- CR Title -->
-            <div class="row mb-3">
-                <div class="col-md-4"><strong>Title:</strong></div>
-                <div class="col-md-8"><p>{{ $changeRequest->title }}</p></div>
-            </div>
+            <!-- Title -->
+            <h3 class="mt-3" style="color:#41acbc;">
+                {{ $changeRequest->title }}
+            </h3>
 
-            <!-- Unit -->
-            <div class="row mb-3">
-                <div class="col-md-4"><strong>Unit:</strong></div>
-                <div class="col-md-8"><p>{{ $changeRequest->unit }}</p></div>
-            </div>
+            <!-- Unit & Need-By -->
+            <p class="mb-1 text-muted">
+                <strong>Unit:</strong> {{ $changeRequest->unit }}
+            </p>
+            <p class="mb-3 text-muted">
+                <strong>Need By:</strong>
+                {{ \Carbon\Carbon::parse($changeRequest->need_by_date)->format('d M, Y') }}
+            </p>
 
-
-            <!-- Need By Date -->
-            <div class="row mb-3">
-                <div class="col-md-4"><strong>Need By Date:</strong></div>
-                <div class="col-md-8">
-                    <p>{{ \Carbon\Carbon::parse($changeRequest->need_by_date)->format('d M, Y') }}</p>
+            <!-- Status Badge (for implementor/hou/hod) -->
+            @if(in_array($user->role, ['implementor','hou','hod']))
+                <div class="mb-3">
+                    <strong>Status:</strong>
+                    <span class="badge"
+                          style="background:#41acbc;
+                                 color:#fff;
+                                 font-size:1rem;
+                                 padding:.5em 1em;">
+                        {{ $changeRequest->status }}
+                    </span>
                 </div>
-            </div>
-
-            <!-- Status (only for implementor) -->
-            @if (in_array($user->role, ['implementor', 'hou', 'hod']))
-            <div class="row mb-3">
-                <div class="col-md-4"><strong>Status:</strong></div>
-                <div class="col-md-8"><p>{{ $changeRequest->status }}</p></div>
-            </div>
-
-            <!-- Complexity (only for implementor) -->
-            <div class="row mb-3">
-                <div class="col-md-4"><strong>Complexity:</strong></div>
-                <div class="col-md-8"><p>{{ $changeRequest->complexity ?? 'Not Assigned' }}</p></div>
-            </div>
+                <p class="mb-3">
+                    <strong>Complexity:</strong>
+                    {{ $changeRequest->complexity ?? 'Not Assigned' }}
+                </p>
             @endif
 
-            <!-- Implementor -->
-            <div class="row mb-3">
-                <div class="col-md-4"><strong>Implementor:</strong></div>
-                <div class="col-md-8"><p>{{ $changeRequest->implementor->name ?? 'Not Assigned' }}</p></div>
-            </div>
-
-            <!-- Requestor -->
-            <div class="row mb-3">
-                <div class="col-md-4"><strong>Requestor:</strong></div>
-                <div class="col-md-8"><p>{{ $changeRequest->requestor->name ?? 'Unknown' }}</p></div>
-            </div>
+            <!-- Implementor & Requestor -->
+            <p class="mb-2"><strong>Implementor:</strong> {{ $changeRequest->implementor->name ?? 'Not Assigned' }}</p>
+            <p class="mb-3"><strong>Requestor:</strong>   {{ $changeRequest->requestor->name  ?? 'Unknown'      }}</p>
 
             <!-- Comment -->
-            <div class="row mb-3">
-                <div class="col-md-4"><strong>Comment:</strong></div>
-                <div class="col-md-8"><p>{{ $changeRequest->comment ?? '-' }}</p></div>
+            <p class="text-muted mb-4">
+                <strong>Comment:</strong>
+                {{ $changeRequest->comment ?? '— No comment provided —' }}
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="mt-4 d-flex justify-content-center gap-3">
+                {{-- Edit button if they can edit --}}
+                @if(in_array($user->role, ['implementor','hou','hod','requestor']))
+                    <a href="{{ route('change-requests.edit', $changeRequest->id) }}"
+                       class="btn btn-wow btn-sm">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                @endif
+                <a href="{{ route('change-requests.index') }}"
+                   class="btn btn-secondary btn-sm">
+                    Back to List
+                </a>
             </div>
 
         </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="d-flex justify-content-center mt-4">
-        <a href="{{ route('change-requests.index') }}" class="btn btn-secondary ms-2"
-            style="background-color: #6c757d; border-color: #5a6268;">Back to List</a>
     </div>
 </div>
 @endsection

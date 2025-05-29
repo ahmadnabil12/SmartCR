@@ -6,8 +6,12 @@
     <div class="col">
         <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
             <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('welcome') }}" style="color: #41acbc; font-weight: 500;">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: #888;">
+                    Dashboard
+                </li>
             </ol>
         </nav>
     </div>

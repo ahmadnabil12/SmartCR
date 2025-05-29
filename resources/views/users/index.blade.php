@@ -10,65 +10,87 @@
     .btn-edit:hover { background:#e6a800; }
     .btn-delete { background:#e74c3c; color:#fff; border:none; border-radius:8px; }
     .btn-delete:hover { background:#b92d14; }
+
+    /* 1) Pill wrapper */
+    .search-bar {
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 1rem;
+      border: 1px solid #ccc;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    /* 2) Remove inner borders/shadows on the input */
+    .search-bar__input {
+    border: none !important;
+    box-shadow: none !important;
+    }
+
+    /* 3) Style the search button cleanly */
+    .search-bar__btn {
+    border: none !important;
+    background: transparent !important;
+    color: #666;
+    padding: 0 16px;
+    }
+
+    /* 4) Subtle hover effect */
+    .search-bar__btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    }
 </style>
 
-<form method="GET" class="mb-4">
-  @if(request('role'))
-    <input type="hidden" name="role" value="{{ request('role') }}">
-  @endif
-
-  <div class="input-group search-bar">
-    <input
-      type="text"
-      name="search"
-      value="{{ request('search') }}"
-      class="form-control"
-      placeholder="Search users by name or email…"
-    >
-    <div class="input-group-append">
-      <button class="btn" type="submit">
-        <i class="fas fa-search"></i>
-      </button>
+<!-- Breadcrumb -->
+<div class="row">
+    <div class="col">
+        <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('welcome') }}" style="color: #41acbc; font-weight: 500;">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('dashboard') }}" style="color: #41acbc; font-weight: 500;">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: #888;">
+                    Users
+                </li>
+            </ol>
+        </nav>
     </div>
-  </div>
-</form>
+</div>
 
-<style>
-/* 1) Pill wrapper */
-.search-bar {
-  max-width: 500px;        /* adjust as needed */
-  margin: 0 auto 1rem;     /* center + spacing below */
-  border: 1px solid #ccc;
-  border-radius: 50px;
-  overflow: hidden;         /* clip children to the pill shape */
-}
-
-/* 2) Remove inner borders/shadows on the input */
-.search-bar__input {
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* 3) Style the search button cleanly */
-.search-bar__btn {
-  border: none !important;
-  background: transparent !important;
-  color: #666;
-  padding: 0 16px;
-}
-
-/* 4) Subtle hover effect */
-.search-bar__btn:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
-</style>
-
-<div class="container mt-5">
+<div class="container mt-1">
     <div class="card p-4" style="border-radius: 1.2rem; box-shadow:0 8px 40px rgba(65,172,188,0.13); border:2px solid #d4f3f8;">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="fw-bold" style="color:#41acbc;">List of Users</h3>
             <a href="{{ route('users.create') }}" class="btn btn-wow"><i class="fas fa-user-plus me-1"></i> Add User</a>
         </div>
+
+        <form method="GET" class="mb-4">
+            @if(request('role'))
+                <input type="hidden" name="role" value="{{ request('role') }}">
+            @endif
+
+            <div class="input-group search-bar">
+                <input
+                type="text"
+                name="search"
+                value="{{ request('search') }}"
+                class="form-control"
+                placeholder="Search users by name or email…"
+                >
+                <div class="input-group-append">
+                <button class="btn" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+                </div>
+            </div>
+        </form>
+    
         <table class="table table-hover table-striped">
             <thead class="bg-teal text-white" style="background: #41acbc;">
                 <tr>
