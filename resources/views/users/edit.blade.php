@@ -33,8 +33,23 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Unit <span style="color:#bbb;">(for HOU only)</span></label>
-            <input type="text" name="unit" class="form-control" value="{{ $user->unit }}">
+            <select name="unit" id="unitDropdown" class="form-select" {{ $user->role === 'hou' ? '' : 'disabled' }}>
+                <option value="">Select Unit</option>
+                <option value="Delivery & Optimization (D&O)" {{ $user->unit == 'Delivery & Optimization (D&O)' ? 'selected' : '' }}>
+                    Delivery & Optimization (D&O)
+                </option>
+                <option value="Logistics & Engineering (L&E)" {{ $user->unit == 'Logistics & Engineering (L&E)' ? 'selected' : '' }}>
+                    Logistics & Engineering (L&E)
+                </option>
+                <option value="Human Resource & Back End (HR)" {{ $user->unit == 'Human Resource & Back End (HR)' ? 'selected' : '' }}>
+                    Human Resource & Back End (HR)
+                </option>
+                <option value="Finance" {{ $user->unit == 'Finance' ? 'selected' : '' }}>
+                    Finance
+                </option>
+            </select>
         </div>
+
         <div class="mb-3">
             <label class="form-label">Change Password</label>
             <input type="password" name="password" class="form-control" placeholder="Leave blank to keep current">
@@ -44,4 +59,25 @@
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.querySelector('select[name="role"]');
+    const unitDropdown = document.getElementById('unitDropdown');
+
+    function toggleUnitDropdown() {
+        if (roleSelect.value === 'hou') {
+            unitDropdown.disabled = false;
+        } else {
+            unitDropdown.disabled = true;
+            unitDropdown.value = '';
+        }
+    }
+
+    toggleUnitDropdown(); // Initial check (on page load)
+    roleSelect.addEventListener('change', toggleUnitDropdown);
+});
+</script>
+
+
 @endsection

@@ -161,7 +161,7 @@
 @endif
 
 <!-- Charts Row 1 -->
-@if(in_array(auth()->user()->role, ['hod', 'hou', 'implementor']))
+@if(in_array(auth()->user()->role, ['hod', 'hou', 'implementor', 'admin']))
     @if((isset($statusChart) && $statusChart->isNotEmpty()) || (isset($complexityChart) && $complexityChart->isNotEmpty()))
     <div class="row">
         <!-- Status Chart -->
@@ -198,7 +198,7 @@
 <!-- Charts Row 2 -->
 <div class="row mb-4">
     <!-- CRs by Unit – only for Requestor or HOD and when $unitChart has values -->
-    @if(in_array(auth()->user()->role, ['requestor','hod']) 
+    @if(in_array(auth()->user()->role, ['requestor','hod', 'admin']) 
         && isset($unitChart) && $unitChart->isNotEmpty())
         <div class="col-xl-6 mb-4">
             <div class="card shadow">
@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function () {
 @endif
 
 <!-- CRs by Unit Bar Chart -->
-@if((auth()->user()->role === 'requestor' || auth()->user()->role === 'hod') && isset($unitChart) && $unitChart->isNotEmpty())
+@if((auth()->user()->role === 'requestor' || auth()->user()->role === 'hod' || auth()->user()->role === 'admin') && isset($unitChart) && $unitChart->isNotEmpty())
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const ctx3 = document.getElementById('unitBarChart')?.getContext('2d');

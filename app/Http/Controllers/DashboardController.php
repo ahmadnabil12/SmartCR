@@ -45,7 +45,7 @@ class DashboardController extends Controller
                                 ->count();
             $label = 'Unit CRs (' . $user->unit . ')';
         }
-        else { // HOD
+        else { // HOD and ADMIN
             $crCount        = ChangeRequest::count();
             $pendingCount   = ChangeRequest::where('status', '!=', 'Completed')->count();
             $completedCount = ChangeRequest::where('status', 'Completed')->count();
@@ -62,6 +62,11 @@ class DashboardController extends Controller
                 ->pluck('total', 'unit');
         }
         elseif ($user->role === 'hod') {
+            $unitChart = ChangeRequest::select('unit', DB::raw('count(*) as total'))
+                ->groupBy('unit')
+                ->pluck('total', 'unit');
+        }
+        elseif ($user->role === 'admin') {
             $unitChart = ChangeRequest::select('unit', DB::raw('count(*) as total'))
                 ->groupBy('unit')
                 ->pluck('total', 'unit');
@@ -124,7 +129,7 @@ class DashboardController extends Controller
             'statusChart'     => $statusChart,
             'complexityChart' => $complexityChart,
             'completionChart' => $completionChart,
-            'recentCRs'      => $recentCRs,
+            'recentCRs'       => $recentCRs,
         ]);
     }
 }

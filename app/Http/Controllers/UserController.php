@@ -47,12 +47,14 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'role' => 'required|string|in:requestor,implementor,hou,hod',
             'password' => 'required|string|min:8',
+            'unit' => $request->role === 'hou' ? 'required|string|max:255' : 'nullable|string|max:255',
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
+            'unit' => $request->role === 'hou' ? $request->unit : null,
             'password' => Hash::make($request->password),
         ]);
 
@@ -78,12 +80,14 @@ class UserController extends Controller
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'role' => 'required|string|in:requestor,implementor,hou,hod',
+            'unit' => $request->role === 'hou' ? 'required|string|max:255' : 'nullable|string|max:255',
         ]);
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
+            'unit' => $request->role === 'hou' ? $request->unit : null,
         ]);
 
         return redirect()->route('users.index')->with('success', 'User updated.');
