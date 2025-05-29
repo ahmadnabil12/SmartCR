@@ -30,18 +30,20 @@
                 {{ \Carbon\Carbon::parse($changeRequest->need_by_date)->format('d M, Y') }}
             </p>
 
-            <!-- Status Badge (for implementor/hou/hod) -->
+            <!-- Status Badge (show to all roles) -->
+            <div class="mb-3">
+                <strong>Status:</strong>
+                <span class="badge"
+                    style="background:#41acbc;
+                            color:#fff;
+                            font-size:1rem;
+                            padding:.5em 1em;">
+                    {{ $changeRequest->status }}
+                </span>
+            </div>
+
+            <!-- Show complexity to implementor/hou/hod -->
             @if(in_array($user->role, ['implementor','hou','hod']))
-                <div class="mb-3">
-                    <strong>Status:</strong>
-                    <span class="badge"
-                          style="background:#41acbc;
-                                 color:#fff;
-                                 font-size:1rem;
-                                 padding:.5em 1em;">
-                        {{ $changeRequest->status }}
-                    </span>
-                </div>
                 <p class="mb-3">
                     <strong>Complexity:</strong>
                     {{ $changeRequest->complexity ?? 'Not Assigned' }}
@@ -60,7 +62,7 @@
 
             <!-- Action Buttons -->
             <div class="mt-4 d-flex justify-content-center gap-3">
-                {{-- Edit button if they can edit --}}
+                <!-- Edit button if they can edit -->
                 @if(in_array($user->role, ['implementor','hou','hod','requestor']))
                     <a href="{{ route('change-requests.edit', $changeRequest->id) }}"
                        class="btn btn-wow btn-sm">

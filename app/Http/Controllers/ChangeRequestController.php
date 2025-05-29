@@ -82,28 +82,62 @@ class ChangeRequestController extends Controller
     // Edit CR (for implementor to update status/complexity)
     public function edit(ChangeRequest $changeRequest)
     {
-        return view('change_requests.edit', compact('changeRequest'));
+        $user = auth()->user();
+
+        // Requestor can only edit if their own CR and status is 'Requirement Gathering'
+        if ($user->role === 'requestor') {
+            if ($changeRequest->requestor_id !== $user->id || $changeRequest->status !== 'Requirement Gathering') {
+                return redirect()->route('change-requests.index')
+                    ->with('error', 'You can only edit your own CR during Requirement Gathering.');
+            }
+        }
+        // Optionally: restrict others if you want
+
+        return view('change_requests.edit', compact('changeRequest', 'user'));
     }
 
     public function update(Request $request, ChangeRequest $changeRequest)
     {
-        $request->validate([
-            'status' => 'required|string',
-            'complexity' => 'required|string|in:Low,Medium,High',
-            'comment' => 'nullable|string',
-        ]);
+        $user = auth()->user();
 
-        $changeRequest->update([
-            'status' => $request->status,
-            'complexity' => $request->complexity,
-            'comment' => $request->comment,
-        ]);
+        if ($user->role === 'requestor') {
+            // Only allow if status is Requirement Gathering
+            if ($changeRequest->status !== 'Requirement Gathering') {
+                return redirect()->route('change-requests.index')
+                    ->with('error', 'You can only update during Requirement Gathering.');
+            }
+
+            // Validate only requestor fields
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'unit' => 'required|string|max:255',
+                'need_by_date' => 'required|date',
+                'comment' => 'nullable|string',
+            ]);
+
+            $changeRequest->update($request->only('title', 'unit', 'need_by_date', 'comment'));
+
+        } else if (in_array($user->role, ['implementor', 'hou', 'hod', 'admin'])) {
+            // Validate implementor/admin fields
+            $request->validate([
+                'status' => 'required|string',
+                'complexity' => 'required|string|in:Low,Medium,High',
+                'comment' => 'nullable|string',
+            ]);
+
+            $changeRequest->update($request->only('status', 'complexity', 'comment'));
+        }
 
         return redirect()->route('change-requests.index')->with('success', 'CR updated successfully.');
     }
 
     public function destroy(ChangeRequest $changeRequest)
     {
+        if (auth()->user()->role === 'requestor' && $changeRequest->status !== 'Requirement Gathering') {
+            return redirect()->route('change-requests.index')
+                ->with('error', 'You can only delete during Requirement Gathering.');
+        }
+
         $changeRequest->delete();
         return back()->with('success', 'CR deleted.');
     }

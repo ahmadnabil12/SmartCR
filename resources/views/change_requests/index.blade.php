@@ -129,19 +129,41 @@
           @endif
 
           <td>{{ $cr->implementor->name ?? 'Not Assigned' }}</td>
-          <td class="d-flex align-items-center gap-2">
-            <a href="{{ route('change-requests.show',   $cr->id) }}" class="btn btn-wow btn-sm" style="margin-right: 5px;"><i class="fas fa-eye"></i></a>
-            <a href="{{ route('change-requests.edit',   $cr->id) }}" class="btn btn-edit btn-sm" style="margin-right: 5px;"><i class="fas fa-edit"></i></a>
-            <form action="{{ route('change-requests.destroy', $cr->id) }}"
-                  method="POST" style="display:inline;">
-              @csrf @method('DELETE')
-              <button type="submit"
-                      class="btn btn-delete btn-sm me-1"
-                      onclick="return confirm('Delete this CR?');">
-                <i class="fas fa-trash"></i>
-              </button>
-            </form>
-          </td>
+
+            <!-- Actions column in your table -->
+            <td>
+                <!-- Requestor: Edit/Delete only if Requirement Gathering -->
+                @if(auth()->user()->role === 'requestor')
+                    @if($cr->status == 'Requirement Gathering')
+                        <a href="{{ route('change-requests.edit', $cr->id) }}" class="btn btn-edit btn-sm me-1" title="Edit"><i class="fas fa-edit"></i></a>
+                        <form action="{{ route('change-requests.destroy', $cr->id) }}" method="POST" style="display:inline;">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn btn-delete btn-sm me-1" onclick="return confirm('Delete this CR?');" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    @endif
+                    <a href="{{ route('change-requests.show', $cr->id) }}" class="btn btn-wow btn-sm" title="View"><i class="fas fa-eye"></i></a>
+                <!-- Admin: Always can edit/delete -->
+                @elseif(auth()->user()->role === 'admin')
+                    <a href="{{ route('change-requests.edit', $cr->id) }}" class="btn btn-edit btn-sm me-1" title="Edit"><i class="fas fa-edit"></i></a>
+                    <form action="{{ route('change-requests.destroy', $cr->id) }}" method="POST" style="display:inline;">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="btn btn-delete btn-sm me-1" onclick="return confirm('Delete this CR?');" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                    <a href="{{ route('change-requests.show', $cr->id) }}" class="btn btn-wow btn-sm" title="View"><i class="fas fa-eye"></i></a>
+                <!-- Implementor: Can edit if assigned -->
+                @elseif(auth()->user()->role === 'implementor' && $cr->implementor_id == auth()->user()->id)
+                    <a href="{{ route('change-requests.edit', $cr->id) }}" class="btn btn-edit btn-sm me-1" title="Edit"><i class="fas fa-edit"></i></a>
+                    <a href="{{ route('change-requests.show', $cr->id) }}" class="btn btn-wow btn-sm" title="View"><i class="fas fa-eye"></i></a>
+                {{-- HOU, HOD, etc: View only --}}
+                @else
+                    <a href="{{ route('change-requests.show', $cr->id) }}" class="btn btn-wow btn-sm" title="View"><i class="fas fa-eye"></i></a>
+                @endif
+            </td>
+
         </tr>
         @empty
         <tr>

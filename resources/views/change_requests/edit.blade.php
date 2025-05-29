@@ -27,25 +27,34 @@
     @endif
 
     <form action="{{ route('change-requests.update', $changeRequest->id) }}"
-          method="POST" autocomplete="off">
+        method="POST" autocomplete="off">
         @csrf
         @method('PUT')
 
+        @php
+            $canEditMain = in_array($user->role, ['requestor','admin']);
+            $canEditStatus = in_array($user->role, ['implementor','hou','hod','admin']);
+        @endphp
+
+        <!-- Title -->
         <div class="mb-3">
             <label class="form-label" for="title">CR Title</label>
             <input type="text"
-                   id="title"
-                   name="title"
-                   class="form-control"
-                   value="{{ $changeRequest->title }}"
-                   required>
+                id="title"
+                name="title"
+                class="form-control"
+                value="{{ $changeRequest->title }}"
+                @if(!$canEditMain) readonly @endif
+                required>
         </div>
 
+        <!-- Unit -->
         <div class="mb-3">
             <label class="form-label" for="unit">Unit</label>
             <select id="unit"
                     name="unit"
                     class="form-select"
+                    @if(!$canEditMain) disabled @endif
                     required>
                 <option value="">-- Select Unit --</option>
                 <option value="Logistics and Engineering (L&E)"
@@ -67,17 +76,20 @@
             </select>
         </div>
 
+        <!-- Need By Date -->
         <div class="mb-3">
             <label class="form-label" for="need_by_date">Need By Date</label>
             <input type="date"
-                   id="need_by_date"
-                   name="need_by_date"
-                   class="form-control"
-                   value="{{ $changeRequest->need_by_date }}"
-                   required>
+                id="need_by_date"
+                name="need_by_date"
+                class="form-control"
+                value="{{ $changeRequest->need_by_date }}"
+                @if(!$canEditMain) readonly @endif
+                required>
         </div>
 
-        @if(in_array($user->role, ['implementor','hou','hod']))
+        <!-- Status/Complexity (Implementor, HOU, HOD, Admin) -->
+        @if($canEditStatus)
             <div class="mb-3">
                 <label class="form-label" for="status">Status</label>
                 <select id="status"
@@ -97,7 +109,6 @@
                     @endforeach
                 </select>
             </div>
-
             <div class="mb-3">
                 <label class="form-label" for="complexity">Complexity</label>
                 <select id="complexity"
@@ -112,14 +123,25 @@
                     @endforeach
                 </select>
             </div>
+        @else
+            <!-- Show as read-only for others -->
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <input type="text" class="form-control" value="{{ $changeRequest->status }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Complexity</label>
+                <input type="text" class="form-control" value="{{ $changeRequest->complexity }}" readonly>
+            </div>
         @endif
 
+        <!-- Comment (always editable) -->
         <div class="mb-3">
             <label class="form-label" for="comment">Comment</label>
             <textarea id="comment"
-                      name="comment"
-                      class="form-control"
-                      rows="3">{{ $changeRequest->comment }}</textarea>
+                    name="comment"
+                    class="form-control"
+                    rows="3">{{ $changeRequest->comment }}</textarea>
         </div>
 
         <div class="mb-3 text-center">
@@ -127,10 +149,11 @@
                 <i class="fas fa-save me-1"></i> Update Change Request
             </button>
             <a href="{{ route('change-requests.index') }}"
-               class="btn btn-secondary ms-2">
+            class="btn btn-secondary ms-2">
                 Cancel
             </a>
         </div>
     </form>
+
 </div>
 @endsection
