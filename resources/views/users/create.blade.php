@@ -21,7 +21,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Role</label>
-            <select name="role" id="role" class="form-select" required>
+            <select name="role" id="role" class="form-control" required>
                 <option value="">Select Role</option>
                 <option value="requestor">Requestor</option>
                 <option value="implementor">Implementor</option>
@@ -31,7 +31,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Unit <span style="color:#bbb;">(for HOU only)</span></label>
-            <select name="unit" id ="unit" class="form-select" disabled>
+            <select name="unit" id ="unit" class="form-control" disabled>
                 <option value="">Select Unit</option>
                 <option value="Delivery & Optimization (D&O)">Delivery & Optimization (D&O)</option>
                 <option value="Logistics & Engineering (L&E)">Logistics & Engineering (L&E)</option>
