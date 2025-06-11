@@ -50,7 +50,7 @@
                 <strong>Need By:</strong>
                 <span class="badge"
                     style="background: {{ $bg }};
-                        color: {{ $bg == '#ffd700' ? '#333':'#fff' }};
+                        color: #fff;
                         font-size: 1rem;
                         padding: .5em 1em;">
                     {{ $needBy->format('d M Y') }} ({{ $label }})
