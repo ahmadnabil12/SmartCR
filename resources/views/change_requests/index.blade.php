@@ -203,7 +203,7 @@
           <td data-order="{{ $cr->need_by_date }}">
               <div style="background: {{ $bg }};
                           color: {{ $bg == '#ffeb3b' ? '#333':'#fff' }};
-                          font-weight: 500;
+                          font-weight: 600;
                           border-radius: 4px;
                           padding: 8px 0;
                           width: 100%;
