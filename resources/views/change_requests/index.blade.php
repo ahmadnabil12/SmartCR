@@ -14,7 +14,7 @@
     .btn-delete { background:#e74c3c; color:#fff; border:none; border-radius:8px; }
     .btn-delete:hover { background:#b92d14; }
 
-    /* 1) Pill wrapper */
+    /* 1) Pill wrapper 
     .search-bar {
       display: inline-flex;
       align-items: center;
@@ -27,13 +27,13 @@
       background: #fff;
     }
 
-    /* 2) Remove inner borders/shadows on the input */
+    /* 2) Remove inner borders/shadows on the input 
     .search-bar__input {
     border: none !important;
     box-shadow: none !important;
     }
 
-    /* 3) Style the search button cleanly */
+    /* 3) Style the search button cleanly 
     .search-bar__btn {
     border: none !important;
     background: transparent !important;
@@ -41,10 +41,41 @@
     padding: 0 16px;
     }
 
-    /* 4) Subtle hover effect */
+    /* 4) Subtle hover effect 
     .search-bar__btn:hover {
     background: rgba(0, 0, 0, 0.05);
+    }*/
+
+    /* DataTables pill-shaped search bar with teal hover */
+    .dataTables_filter label {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
     }
+
+    .dataTables_filter input[type="search"] {
+        border-radius: 999px;
+        border: 1.5px solid #ccc;
+        padding: 0.32rem 1.1rem;
+        font-size: 1rem;
+        color: #666;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        background: #fff;
+        box-shadow: none;
+        outline: none;
+        margin-left: 0;
+        width: 100%;
+        max-width: 550px;
+        height: 2.5rem;
+    }
+
+    .dataTables_filter input[type="search"]:hover,
+    .dataTables_filter input[type="search"]:focus {
+        border-color: #41acbc;
+        box-shadow: 0 2px 8px #41acbc11;
+    }
+
+    
 </style>
 
 <!-- Breadcrumb -->
@@ -84,7 +115,7 @@
       @endif
     </div>
 
-    <!-- Search Bar -->
+    <!-- Search Bar >
     <form action="{{ route('change-requests.index') }}" method="GET" class="mb-4">
         <div class="input-group search-bar">
             <input
@@ -100,11 +131,12 @@
             </button>
             </div>
         </div>
-    </form>
+    </form-->
 
-    <table class="table table-hover table-striped teal-table">
+    <table class="table table-hover table-striped teal-table" id="changeRequestsTable">
       <thead style="background: #41acbc;" class="text-white">
         <tr>
+          <th>#</th>
           <th>Title</th>
           <th>Unit</th>
           <th>Need By</th>
@@ -119,10 +151,12 @@
       <tbody>
         @forelse($changeRequests as $cr)
         <tr>
+          <td>{{ $loop->iteration }}</td>
           <td>{{ $cr->title }}</td>
           <td>{{ $cr->unit }}</td>
-          <td>{{ \Carbon\Carbon::parse($cr->need_by_date)->format('d M, Y') }}</td>
-
+          <td data-order="{{ $cr->need_by_date }}">
+              {{ \Carbon\Carbon::parse($cr->need_by_date)->format('d M, Y') }}
+          </td>
           @if($user->role !== 'requestor')
             <td>{{ $cr->status }}</td>
             <td>{{ $cr->complexity ?? 'N/A' }}</td>
@@ -179,3 +213,31 @@
   </div>
 </div>
 @endsection
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+@endpush
+
+@push('scripts')
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#changeRequestsTable').DataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": -1 }
+                ],
+                "language": {
+                    search: "",
+                    searchPlaceholder: "Search CR by title"
+                }
+            });
+
+            // Move DataTables search bar to be wider and more centered if needed
+            $('.dataTables_filter input[type="search"]').css({
+                'width': '100%',
+                'max-width': '700px'
+            });
+        });
+    </script>
+@endpush
+
