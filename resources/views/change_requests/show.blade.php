@@ -21,14 +21,41 @@
                 {{ $changeRequest->title }}
             </h3>
 
-            <!-- Unit & Need-By -->
+            <!-- Unit -->
             <p class="mb-1 text-muted">
                 <strong>Unit:</strong> {{ $changeRequest->unit }}
             </p>
-            <p class="mb-3 text-muted">
+
+            <!-- Need By Date -->
+             @php
+                $today = \Carbon\Carbon::today();
+                $needBy = \Carbon\Carbon::parse($changeRequest->need_by_date);
+                $diff = $today->diffInDays($needBy, false);
+                if ($diff < 0) {
+                    $bg = '#ff4d4f'; // Dark Red - Delayed
+                    $label = 'Delayed';
+                } elseif ($diff <= 10) {
+                    $bg = '#ff6e00'; // Red - Urgent
+                    $label = 'Urgent';
+                } elseif ($diff <= 20) {
+                    $bg = '#ffd700'; // Yellow - Important
+                    $label = 'Important';
+                } else {
+                    $bg = '#52c41a'; // Green - Standard
+                    $label = 'Standard';
+                }
+            @endphp
+            <!-- Need By (styled exactly like Status) -->
+            <div class="mb-3">
                 <strong>Need By:</strong>
-                {{ \Carbon\Carbon::parse($changeRequest->need_by_date)->format('d M, Y') }}
-            </p>
+                <span class="badge"
+                    style="background: {{ $bg }};
+                        color: {{ $bg == '#ffd700' ? '#333':'#fff' }};
+                        font-size: 1rem;
+                        padding: .5em 1em;">
+                    {{ $needBy->format('d M Y') }} ({{ $label }})
+                </span>
+            </div>
 
             <!-- Status Badge (show to all roles) -->
             <div class="mb-3">
