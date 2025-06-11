@@ -142,13 +142,31 @@
           <th>Need By</th>
           @if (in_array($user->role, ['implementor','hou','hod','admin']))
             <th>Status</th>
-            <th>Complexity</th>
+            <!--th>Complexity</th-->
           @endif
           <th>Implementor</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
+      <!-- Define the order of statuses for sorting -->
+        @php
+            $statusOrder = [
+                'Requirement Gathering'   => 1,
+                'Feasibility Study'       => 2,
+                'SOW Preparation'         => 3,
+                'SOW Sign Off'            => 4,
+                'Quotation Preparation'   => 5,
+                'Quotation Sign Off'      => 6,
+                'Development Plan'        => 7,
+                'Development'             => 8,
+                'SIT'                     => 9,
+                'UAT'                     => 10,
+                'UAT Sign Off'            => 11,
+                'Deployment'              => 12,
+            ];
+        @endphp
+
         @forelse($changeRequests as $cr)
         <tr>
           <td>{{ $loop->iteration }}</td>
@@ -158,8 +176,13 @@
               {{ \Carbon\Carbon::parse($cr->need_by_date)->format('d M, Y') }}
           </td>
           @if($user->role !== 'requestor')
-            <td>{{ $cr->status }}</td>
-            <td>{{ $cr->complexity ?? 'N/A' }}</td>
+            @php
+                $statusIndex = $statusOrder[$cr->status ?? ''] ?? 99;
+            @endphp
+            <td data-order="{{ $statusIndex }}">
+                {{ $cr->status }}
+            </td>
+            <!--td>{{ $cr->complexity ?? 'N/A' }}</td-->
           @endif
 
           <td>{{ $cr->implementor->name ?? 'Not Assigned' }}</td>

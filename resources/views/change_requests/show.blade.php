@@ -42,13 +42,11 @@
                 </span>
             </div>
 
-            <!-- Show complexity to implementor/hou/hod -->
-            @if(in_array($user->role, ['implementor','hou','hod']))
-                <p class="mb-3">
-                    <strong>Complexity:</strong>
-                    {{ $changeRequest->complexity ?? 'Not Assigned' }}
-                </p>
-            @endif
+            <!-- Show complexity -->
+            <p class="mb-2">
+                <strong>Complexity:</strong>
+                {{ $changeRequest->complexity ?? 'Not Assigned' }}
+            </p>
 
             <!-- Implementor & Requestor -->
             <p class="mb-2"><strong>Implementor:</strong> {{ $changeRequest->implementor->name ?? 'Not Assigned' }}</p>
