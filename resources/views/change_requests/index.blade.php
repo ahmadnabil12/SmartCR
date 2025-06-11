@@ -75,7 +75,14 @@
         box-shadow: 0 2px 8px #41acbc11;
     }
 
+    /* Status color coding */
+    .delayed-date   { background: #ff4d4f;  color: #fff; font-weight:600; border-radius:6px; padding:3px 10px;}
+    .urgent-date    { background: #ff6e00;  color: #fff; font-weight:600; border-radius:6px; padding:3px 10px; }
+    .important-date { background: #ffd700;  color: #333; font-weight:600; border-radius:6px; padding:3px 10px;}
+    .standard-date  { background: #52c41a;  color: #fff; font-weight:600; border-radius:6px; padding:3px 10px;}
     
+
+      
 </style>
 
 <!-- Breadcrumb -->
@@ -172,9 +179,44 @@
           <td>{{ $loop->iteration }}</td>
           <td>{{ $cr->title }}</td>
           <td>{{ $cr->unit }}</td>
+
+          <!-- Display urgency based on need_by_date -->
+          @php
+              $today = \Carbon\Carbon::today();
+              $needBy = \Carbon\Carbon::parse($cr->need_by_date);
+              $diff = $today->diffInDays($needBy, false); // false = negative if past
+              if ($diff < 0) {
+                  // Delayed
+                  $bg = '#ff4d4f'; // Dark Red
+                  $label = 'Delayed';
+              } elseif ($diff <= 10) {
+                  // Urgent
+                  $bg = '#ff6e00'; // Red
+                  $label = 'Urgent';
+              } elseif ($diff <= 20) {
+                  // Important
+                  $bg = '#ffd700'; // Yellow
+                  $label = 'Important';
+              } else {
+                  // Standard
+                  $bg = '#52c41a'; // Green
+                  $label = 'Standard';
+              }
+          @endphp
           <td data-order="{{ $cr->need_by_date }}">
-              {{ \Carbon\Carbon::parse($cr->need_by_date)->format('d M, Y') }}
+              <div style="background: {{ $bg }};
+                          color: {{ $bg == '#ffeb3b' ? '#333':'#fff' }};
+                          font-weight: 500;
+                          border-radius: 4px;
+                          padding: 8px 0;
+                          width: 100%;
+                          text-align: center;
+                          white-space: nowrap;">
+                  {{ $needBy->format('d M Y') }}
+              </div>
           </td>
+
+          <!-- Status column only for non-requestors -->
           @if($user->role !== 'requestor')
             @php
                 $statusIndex = $statusOrder[$cr->status ?? ''] ?? 99;
@@ -185,6 +227,7 @@
             <!--td>{{ $cr->complexity ?? 'N/A' }}</td-->
           @endif
 
+          <!-- Implementor name column -->
           <td>{{ $cr->implementor->name ?? 'Not Assigned' }}</td>
 
             <!-- Actions column in your table -->
