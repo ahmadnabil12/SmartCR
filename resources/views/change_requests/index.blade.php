@@ -147,10 +147,7 @@
           <th>Title</th>
           <th>Unit</th>
           <th>Need By</th>
-          @if (in_array($user->role, ['implementor','hou','hod','admin']))
-            <th>Status</th>
-            <!--th>Complexity</th-->
-          @endif
+          <th>Status</th>
           <th>Implementor</th>
           <th>Actions</th>
         </tr>
@@ -217,15 +214,12 @@
           </td>
 
           <!-- Status column only for non-requestors -->
-          @if($user->role !== 'requestor')
-            @php
-                $statusIndex = $statusOrder[$cr->status ?? ''] ?? 99;
-            @endphp
-            <td data-order="{{ $statusIndex }}">
-                {{ $cr->status }}
-            </td>
-            <!--td>{{ $cr->complexity ?? 'N/A' }}</td-->
-          @endif
+          @php
+              $statusIndex = $statusOrder[$cr->status ?? ''] ?? 99;
+          @endphp
+          <td data-order="{{ $statusIndex }}">
+              {{ $cr->status }}
+          </td>
 
           <!-- Implementor name column -->
           <td>{{ $cr->implementor->name ?? 'Not Assigned' }}</td>
