@@ -45,8 +45,8 @@
                 required
             >
                 <option value="">-- Select Unit --</option>
-                <option value="Logistics and Engineering (L&E)" {{ old('unit')=='Logistics and Engineering (L&E)' ? 'selected':'' }}>
-                    Logistics and Engineering (L&E)
+                <option value="Logistics & Engineering (L&E)" {{ old('unit')=='Logistics & Engineering (L&E)' ? 'selected':'' }}>
+                    Logistics & Engineering (L&E)
                 </option>
                 <option value="Delivery & Optimization (D&O)" {{ old('unit')=='Delivery & Optimization (D&O)' ? 'selected':'' }}>
                     Delivery & Optimization (D&O)

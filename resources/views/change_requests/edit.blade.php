@@ -57,9 +57,9 @@
                     @if(!$canEditMain) disabled @endif
                     required>
                 <option value="">-- Select Unit --</option>
-                <option value="Logistics and Engineering (L&E)"
-                    {{ $changeRequest->unit == 'Logistics and Engineering (L&E)' ? 'selected' : '' }}>
-                    Logistics and Engineering (L&E)
+                <option value="Logistics & Engineering (L&E)"
+                    {{ $changeRequest->unit == 'Logistics & Engineering (L&E)' ? 'selected' : '' }}>
+                    Logistics & Engineering (L&E)
                 </option>
                 <option value="Delivery & Optimization (D&O)"
                     {{ $changeRequest->unit == 'Delivery & Optimization (D&O)' ? 'selected' : '' }}>
