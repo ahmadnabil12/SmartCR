@@ -32,7 +32,8 @@ class ChangeRequestController extends Controller
         // 3) finally execute
         $changeRequests = $query->get();
 
-        return view('change_requests.index', compact('changeRequests'));
+        $filter = null;
+        return view('change_requests.index', compact('changeRequests', 'filter'));
     }
 
     // Form to create CR
@@ -166,7 +167,8 @@ class ChangeRequestController extends Controller
         };
 
         $changeRequests = $query->where('status', '!=', 'Completed')->get();
-        return view('change_requests.index', compact('changeRequests'));
+        $filter = 'Pending';
+        return view('change_requests.index', compact('changeRequests', 'filter'));
     }
 
     public function completed()
@@ -180,6 +182,7 @@ class ChangeRequestController extends Controller
         };
 
         $changeRequests = $query->where('status', 'Completed')->get();
-        return view('change_requests.index', compact('changeRequests'));
+        $filter = 'Completed';
+        return view('change_requests.index', compact('changeRequests', 'filter'));
     }
 }

@@ -114,6 +114,9 @@
         <h3 class="fw-bold" style="color: #41acbc;">
             <i class="fas fa-file-alt" style="margin-right:10px;"></i>
             List of Change Requests
+            @if(!empty($filter))
+                <span style="font-weight:400;">({{ $filter }})</span>
+            @endif
         </h3>
 
       <!-- Submit New CR button only for requestors -->
