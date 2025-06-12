@@ -19,6 +19,19 @@
         .mb-2 { margin-bottom: 16px; }
         .center { text-align: center; }
         .chart-img { display:block; margin: 18px auto; max-width: 360px; }
+
+        .urgency-delayed   { background: #ff4d4f;  color: #fff; }
+        .urgency-urgent    { background: #ff6e00;  color: #fff; }
+        .urgency-important { background: #ffd700;  color: #333; }
+        .urgency-standard  { background: #52c41a;  color: #fff; }
+        .urgency-badge {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -48,6 +61,24 @@
             <div>Completed</div>
         </div>
     </div>
+
+    <!-- Status Breakdown (Date) -->
+    <table width="100%" style="margin: 18px 0;">
+        <tr>
+            <td align="center" style="background:#ff4d4f; color:#fff; padding: 10px 0; border-radius: 8px; font-weight:bold;">
+                Delayed<br>{{ $delayedCount }}
+            </td>
+            <td align="center" style="background:#ff6e00; color:#fff; padding: 10px 0; border-radius: 8px; font-weight:bold;">
+                Urgent<br>{{ $urgentCount }}
+            </td>
+            <td align="center" style="background:#ffd700; color:#333; padding: 10px 0; border-radius: 8px; font-weight:bold;">
+                Important<br>{{ $importantCount }}
+            </td>
+            <td align="center" style="background:#52c41a; color:#fff; padding: 10px 0; border-radius: 8px; font-weight:bold;">
+                Standard<br>{{ $standardCount }}
+            </td>
+        </tr>
+    </table>
 
     <!-- Insights Section -->
     @php
@@ -100,20 +131,36 @@
             </tr>
         </thead>
         <tbody>
-        @foreach($changeRequests as $i => $cr)
-            <tr>
-                <td>{{ $i+1 }}</td>
-                <td>{{ $cr->title }}</td>
-                <td>{{ $cr->unit }}</td>
-                <td>{{ $cr->status }}</td>
-                <td>{{ \Carbon\Carbon::parse($cr->need_by_date)->format('d M Y') }}</td>
-                <td>{{ $cr->requestor->name ?? '-' }}</td>
-                <td>{{ $cr->implementor->name ?? '-' }}</td>
-            </tr>
-        @endforeach
-        @if($changeRequests->count() == 0)
-            <tr><td colspan="7" class="center">No CRs found for this date range.</td></tr>
-        @endif
+            @foreach($changeRequests as $i => $cr)
+                @php
+                    $today = \Carbon\Carbon::today();
+                    $needBy = \Carbon\Carbon::parse($cr->need_by_date);
+                    $diff = $today->diffInDays($needBy, false);
+                    if ($diff < 0) {
+                        $urgencyClass = 'urgency-delayed';
+                    } elseif ($diff <= 10) {
+                        $urgencyClass = 'urgency-urgent';
+                    } elseif ($diff <= 20) {
+                        $urgencyClass = 'urgency-important';
+                    } else {
+                        $urgencyClass = 'urgency-standard';
+                    }
+                @endphp
+                <tr>
+                    <td class="{{ $urgencyClass }}" style="font-weight:bold; text-align:center;">
+                        {{ $i + 1 }}
+                    </td>
+                    <td>{{ $cr->title }}</td>
+                    <td>{{ $cr->unit }}</td>
+                    <td>{{ $cr->status }}</td>
+                    <td>{{ \Carbon\Carbon::parse($cr->need_by_date)->format('d M Y') }}</td>
+                    <td>{{ $cr->requestor->name ?? '-' }}</td>
+                    <td>{{ $cr->implementor->name ?? '-' }}</td>
+                </tr>
+            @endforeach
+            @if($changeRequests->count() == 0)
+                <tr><td colspan="7" class="center">No CRs found for this date range.</td></tr>
+            @endif
         </tbody>
     </table>
 

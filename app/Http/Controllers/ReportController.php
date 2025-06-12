@@ -36,34 +36,47 @@ class ReportController extends Controller
     {
         $user = auth()->user();
         $from = $request->input('from');
-        $to   = $request->input('to');
+        $to = $request->input('to');
 
         $query = \App\Models\ChangeRequest::query();
 
-        // Restrict for HOU
         if ($user->role === 'hou') {
             $query->where('unit', $user->unit);
         }
-
-        // Date filter
         if ($from && $to) {
             $query->whereBetween('need_by_date', [$from, $to]);
         }
+        $changeRequests = $query->get();
 
-        $changeRequests = $query->with(['requestor', 'implementor'])->get();
+        // Calculate urgency counts
+        $today = \Carbon\Carbon::today();
+        $delayedCount = $changeRequests->filter(function($cr) use ($today) {
+            return \Carbon\Carbon::parse($cr->need_by_date)->lt($today);
+        })->count();
 
-        // Summary cards (just like dashboard)
-        $crCount       = $changeRequests->count();
-        $pendingCount  = $changeRequests->where('status', '!=', 'Completed')->count();
-        $completedCount= $changeRequests->where('status', 'Completed')->count();
+        $urgentCount = $changeRequests->filter(function($cr) use ($today) {
+            $diff = $today->diffInDays(\Carbon\Carbon::parse($cr->need_by_date), false);
+            return $diff >= 0 && $diff <= 10;
+        })->count();
+
+        $importantCount = $changeRequests->filter(function($cr) use ($today) {
+            $diff = $today->diffInDays(\Carbon\Carbon::parse($cr->need_by_date), false);
+            return $diff > 10 && $diff <= 20;
+        })->count();
+
+        $standardCount = $changeRequests->filter(function($cr) use ($today) {
+            $diff = $today->diffInDays(\Carbon\Carbon::parse($cr->need_by_date), false);
+            return $diff > 20;
+        })->count();
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('reports.pdf', [
-            'crCount'        => $crCount,
-            'pendingCount'   => $pendingCount,
-            'completedCount' => $completedCount,
             'changeRequests' => $changeRequests,
-            'from'           => $from,
-            'to'             => $to,
+            'from' => $from,
+            'to' => $to,
+            'delayedCount' => $delayedCount,
+            'urgentCount' => $urgentCount,
+            'importantCount' => $importantCount,
+            'standardCount' => $standardCount,
         ]);
 
         return $pdf->download('ChangeRequestsReport_' . now()->format('Ymd_His') . '.pdf');
