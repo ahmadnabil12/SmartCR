@@ -11,36 +11,33 @@
     .btn-delete { background:#e74c3c; color:#fff; border:none; border-radius:8px; }
     .btn-delete:hover { background:#b92d14; }
 
-    /* 1) Pill wrapper */
-    .search-bar {
-      display: inline-flex;
-      align-items: center;
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto 1rem;
-      border: 1px solid #ccc;
-      border-radius: 999px;
-      overflow: hidden;
-      background: #fff;
+    /* DataTables pill-shaped search bar with teal hover */
+    .dataTables_filter label {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
     }
 
-    /* 2) Remove inner borders/shadows on the input */
-    .search-bar__input {
-    border: none !important;
-    box-shadow: none !important;
+    .dataTables_filter input[type="search"] {
+        border-radius: 999px;
+        border: 1.5px solid #ccc;
+        padding: 0.32rem 1.1rem;
+        font-size: 1rem;
+        color: #666;
+        background: #fff;
+        box-shadow: none;
+        outline: none;
+        margin-left: 0;
+        width: 100%;
+        max-width: 550px;
+        height: 2.5rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    /* 3) Style the search button cleanly */
-    .search-bar__btn {
-    border: none !important;
-    background: transparent !important;
-    color: #666;
-    padding: 0 16px;
-    }
-
-    /* 4) Subtle hover effect */
-    .search-bar__btn:hover {
-    background: rgba(0, 0, 0, 0.05);
+    .dataTables_filter input[type="search"]:hover,
+    .dataTables_filter input[type="search"]:focus {
+        border-color: #41acbc;
+        box-shadow: 0 2px 8px #41acbc11;
     }
 </style>
 
@@ -69,29 +66,8 @@
             <h3 class="fw-bold" style="color:#41acbc;">List of Users</h3>
             <a href="{{ route('users.create') }}" class="btn btn-wow"><i class="fas fa-user-plus me-1"></i> Add User</a>
         </div>
-
-        <form method="GET" class="mb-4">
-            @if(request('role'))
-                <input type="hidden" name="role" value="{{ request('role') }}">
-            @endif
-
-            <div class="input-group search-bar">
-                <input
-                type="text"
-                name="search"
-                value="{{ request('search') }}"
-                class="form-control"
-                placeholder="Search users by name or email…"
-                >
-                <div class="input-group-append">
-                <button class="btn" type="submit">
-                    <i class="fas fa-search"></i>
-                </button>
-                </div>
-            </div>
-        </form>
     
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped teal-table" id="usersTable">
             <thead class="bg-teal text-white" style="background: #41acbc;">
                 <tr>
                     <th>#</th>
@@ -105,7 +81,7 @@
             <tbody>
                 @foreach ($users as $i => $user)
                 <tr>
-                    <td>{{ $i+1 }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td><a href="{{ route('users.show', $user->id) }}" style="color:#41acbc;">{{ $user->name }}</a></td>
                     <td>{{ $user->email }}</td>
                     <td>
@@ -136,3 +112,30 @@
     </div>
 </div>
 @endsection
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+@endpush
+
+@push('scripts')
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#usersTable').DataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": -1 }
+                ],
+                "language": {
+                    search: "",
+                    searchPlaceholder: "Search users by name or email"
+                }
+            });
+
+            // Move DataTables search bar to be wider and more centered if needed
+            $('.dataTables_filter input[type="search"]').css({
+                'width': '100%',
+                'max-width': '700px'
+            });
+        });
+    </script>
+@endpush
