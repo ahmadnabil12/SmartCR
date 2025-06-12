@@ -27,21 +27,24 @@
             </p>
 
             <!-- Need By Date -->
-             @php
+            @php
                 $today = \Carbon\Carbon::today();
                 $needBy = \Carbon\Carbon::parse($changeRequest->need_by_date);
                 $diff = $today->diffInDays($needBy, false);
-                if ($diff < 0) {
-                    $bg = '#ff4d4f'; // Dark Red - Delayed
+                if ($changeRequest->status === 'Completed') {
+                    $bg = '#52c41a'; // Green for completed
+                    $label = 'Completed';
+                } elseif ($diff < 0) {
+                    $bg = '#ff4d4f'; // Red - Delayed
                     $label = 'Delayed';
                 } elseif ($diff <= 10) {
-                    $bg = '#ff6e00'; // Red - Urgent
+                    $bg = '#ff6e00'; // Orange - Urgent
                     $label = 'Urgent';
                 } elseif ($diff <= 20) {
                     $bg = '#ffd700'; // Yellow - Important
                     $label = 'Important';
                 } else {
-                    $bg = '#52c41a'; // Green - Standard
+                    $bg = '#4169e1'; // Blue - Standard
                     $label = 'Standard';
                 }
             @endphp

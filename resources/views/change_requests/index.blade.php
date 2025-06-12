@@ -183,52 +183,51 @@
           <td>{{ $cr->title }}</td>
           <td>{{ $cr->unit }}</td>
 
-          <!-- Display urgency based on need_by_date -->
-          @php
-              $today = \Carbon\Carbon::today();
-              $needBy = \Carbon\Carbon::parse($cr->need_by_date);
-              $diff = $today->diffInDays($needBy, false); // false = negative if past
-              if ($diff < 0) {
-                  // Delayed
-                  $bg = '#ff4d4f'; // Red
-                  $label = 'Delayed';
-              } elseif ($diff <= 10) {
-                  // Urgent
-                  $bg = '#ff6e00'; // Orange
-                  $label = 'Urgent';
-              } elseif ($diff <= 20) {
-                  // Important
-                  $bg = '#ffd700'; // Yellow
-                  $label = 'Important';
-              } else {
-                  // Standard
-                  $bg = '4169e1'; // Blue  
-                  $label = 'Standard';
-              }
-          @endphp
-          <td data-order="{{ $cr->need_by_date }}">
-              <div style="background: {{ $bg }};
-                          color: {{ $bg == '#ffeb3b' ? '#333':'#fff' }};
-                          font-weight: 600;
-                          border-radius: 4px;
-                          padding: 8px 0;
-                          width: 100%;
-                          text-align: center;
-                          white-space: nowrap;">
-                  {{ $needBy->format('d M Y') }}
-              </div>
-          </td>
+        <!-- Display urgency based on need_by_date -->
+        @php
+            $today = \Carbon\Carbon::today();
+            $needBy = \Carbon\Carbon::parse($cr->need_by_date);
+            $diff = $today->diffInDays($needBy, false); // false = negative if past
+            if ($cr->status === 'Completed') {
+                $bg = '#52c41a';      // Green for completed
+                $label = 'Completed';
+            } elseif ($diff < 0) {
+                $bg = '#ff4d4f';      // Red for Delayed
+                $label = 'Delayed';
+            } elseif ($diff <= 10) {
+                $bg = '#ff6e00';      // Orange for Urgent
+                $label = 'Urgent';
+            } elseif ($diff <= 20) {
+                $bg = '#ffd700';      // Yellow for Important
+                $label = 'Important';
+            } else {
+                $bg = '#4169e1';      // Blue for Standard
+                $label = 'Standard';
+            }
+        @endphp
+        <td data-order="{{ $cr->need_by_date }}">
+            <div style="background: {{ $bg }};
+                        color: {{ $bg == '#ffeb3b' ? '#333':'#fff' }};
+                        font-weight: 600;
+                        border-radius: 4px;
+                        padding: 8px 0;
+                        width: 100%;
+                        text-align: center;
+                        white-space: nowrap;">
+                {{ $needBy->format('d M Y') }}
+            </div>
+        </td>
 
-          <!-- Status column only for non-requestors -->
-          @php
-              $statusIndex = $statusOrder[$cr->status ?? ''] ?? 99;
-          @endphp
-          <td data-order="{{ $statusIndex }}">
-              {{ $cr->status }}
-          </td>
+        <!-- Status column only for non-requestors -->
+        @php
+            $statusIndex = $statusOrder[$cr->status ?? ''] ?? 99;
+        @endphp
+        <td data-order="{{ $statusIndex }}">
+            {{ $cr->status }}
+        </td>
 
-          <!-- Implementor name column -->
-          <td>{{ $cr->implementor->name ?? 'Not Assigned' }}</td>
+        <!-- Implementor name column -->
+        <td>{{ $cr->implementor->name ?? 'Not Assigned' }}</td>
 
             <!-- Actions column in your table -->
             <td>
