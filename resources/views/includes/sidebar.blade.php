@@ -13,7 +13,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
@@ -29,13 +29,13 @@
     </div>
 
     <!-- Nav Item - Change Requests -->
-    <li class="nav-item">
+    <li class="nav-item {{ request()->routeIs('change-requests.*') ? 'active' : '' }}">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCR"
            aria-expanded="false" aria-controls="collapseCR">
             <i class="fas fa-fw fa-file-alt"></i>
             <span>Change Requests</span>
         </a>
-        <div id="collapseCR" class="collapse" aria-labelledby="headingCR" data-parent="#accordionSidebar">
+        <div id="collapseCR" class="collapse {{ request()->routeIs('change-requests.*') ? 'show' : '' }}">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">CR Management</h6>
                 <a class="collapse-item" href="{{ route('change-requests.index') }}">All CRs</a>
@@ -47,15 +47,14 @@
 
     <!-- Nav Item - Users -->
     @if(auth()->user()->role === 'admin')
-        <li class="nav-item">
+        <li class="nav-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
             <a class="nav-link collapsed" href="#" 
                 data-toggle="collapse" data-target="#collapseUsers" 
                 aria-expanded="false" aria-controls="collapseUsers">
                 <i class="fas fa-users"></i>
                 <span>Users</span>
             </a>
-            <div id="collapseUsers" class="collapse" 
-                aria-labelledby="headingUsers" data-parent="#accordionSidebar">
+            <div id="collapseUsers" class="collapse {{ request()->routeIs('users.*') ? 'show' : '' }}">
                 <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">By Role:</h6>
                 <a class="collapse-item" href="{{ route('users.index') }}">
