@@ -8,6 +8,7 @@ use App\Http\Controllers\ChangeRequestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
@@ -48,6 +49,10 @@ Route::middleware(['auth'])->group(function () {
 
     // User management (optional: restrict by role later)
     Route::resource('users', UserController::class);
+
+    // Report routes
+    Route::get('/reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/download', [\App\Http\Controllers\ReportController::class, 'downloadPdf'])->name('reports.downloadPdf');
 
     // Test email sending
     Route::get('/test-email', function () {

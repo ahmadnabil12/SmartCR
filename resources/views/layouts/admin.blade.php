@@ -141,12 +141,12 @@
 
     @stack('scripts')
 
-    <!-- Custom script to hide flash message after 2.4 seconds -->
+    <!-- Custom script to hide flash message after 5 seconds -->
     <script>
         setTimeout(() => {
             const msg = document.getElementById('flash-message');
             if(msg) msg.style.display = 'none';
-        }, 2400);
+        }, 5000);
     </script>
 
 

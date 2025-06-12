@@ -77,6 +77,14 @@
         </li>
     @endif
 
+    <!-- Nav Item - Reports -->
+    <li class="nav-item {{ request()->routeIs('reports.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('reports.index') }}">
+            <i class="fas fa-chart-bar me-2"></i>
+            <span>Reports</span>
+        </a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
