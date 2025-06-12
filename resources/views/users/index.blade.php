@@ -122,12 +122,13 @@
     <script>
         $(document).ready(function () {
             $('#usersTable').DataTable({
-                "columnDefs": [
-                    { "orderable": false, "targets": -1 }
+                columnDefs: [
+                    { searchable: true,  targets: 1 }, // Name column (assuming # is 0, Name is 1)
+                    { searchable: false, targets: [0, 2, 3, 4, 5] } // #, Email, Role, Unit, Actions
                 ],
-                "language": {
+                language: {
                     search: "",
-                    searchPlaceholder: "Search users by name or email"
+                    searchPlaceholder: "Search users by name"
                 }
             });
 

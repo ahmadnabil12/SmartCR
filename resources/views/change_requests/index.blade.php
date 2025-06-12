@@ -320,10 +320,11 @@
     <script>
         $(document).ready(function () {
             $('#changeRequestsTable').DataTable({
-                "columnDefs": [
-                    { "orderable": false, "targets": -1 }
+                columnDefs: [
+                    { searchable: true,  targets: 1 }, // Title column (assuming # is 0, Title is 1)
+                    { searchable: false, targets: [0, 2, 3, 4, 5, 6] } // #, Unit, Need By, Status, Implementor, Actions
                 ],
-                "language": {
+                language: {
                     search: "",
                     searchPlaceholder: "Search CR by title"
                 }
