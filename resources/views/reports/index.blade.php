@@ -100,7 +100,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Pending
+                                    CR's Pending
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                                     {{ $changeRequests->where('status', '!=', 'Completed')->count() }}
@@ -119,7 +119,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Completed
+                                    CR's Completed
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                                     {{ $changeRequests->where('status', 'Completed')->count() }}

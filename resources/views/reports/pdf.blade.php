@@ -20,10 +20,11 @@
         .center { text-align: center; }
         .chart-img { display:block; margin: 18px auto; max-width: 360px; }
 
-        .urgency-delayed   { background: #ff4d4f;  color: #fff; }
-        .urgency-urgent    { background: #ff6e00;  color: #fff; }
-        .urgency-important { background: #ffd700;  color: #333; }
-        .urgency-standard  { background: #4169e1;  color: #fff; }
+        .urgency-completed { background: #52c41a; color: #fff; }
+        .urgency-delayed   { background: #ff4d4f; color: #fff; }
+        .urgency-urgent    { background: #ff6e00; color: #fff; }
+        .urgency-important { background: #ffd700; color: #fff; }
+        .urgency-standard  { background: #4169e1; color: #fff; }
         .urgency-badge {
             display: inline-block;
             width: 100%;
@@ -136,7 +137,9 @@
                     $today = \Carbon\Carbon::today();
                     $needBy = \Carbon\Carbon::parse($cr->need_by_date);
                     $diff = $today->diffInDays($needBy, false);
-                    if ($diff < 0) {
+                    if ($cr->status === 'Completed') {
+                        $urgencyClass = 'urgency-completed';
+                    } elseif ($diff < 0) {
                         $urgencyClass = 'urgency-delayed';
                     } elseif ($diff <= 10) {
                         $urgencyClass = 'urgency-urgent';
