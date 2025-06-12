@@ -6,21 +6,21 @@
     <i class="fa fa-bars"></i>
 </button>
 
-<!-- Topbar Search -->
+<!-- Topbar Search >
 <form
     class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
     <div class="input-group">
-        <!-- Disabled input field -->
+        <!- Disabled input field >
         <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
             aria-label="Search" aria-describedby="basic-addon2" disabled>
         <div class="input-group-append">
-            <!-- Disabled button -->
+            <!- Disabled button >
             <button class="btn" type="button" disabled style="background-color: rgb(65, 172, 188); border-color: rgb(65, 172, 188); color: #fff;">
                 <i class="fas fa-search fa-sm"></i></i>
             </button>
         </div>
     </div>
-</form>
+</form-->
 
 
 <!-- Can Search-->
