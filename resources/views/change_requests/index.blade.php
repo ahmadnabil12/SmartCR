@@ -5,29 +5,6 @@
     $user = Auth::user();
 @endphp
 
-@if(session('success'))
-    <div id="flash-message" class="alert alert-success" style="
-        position: fixed;
-        top: 30px;
-        right: 40px;
-        z-index: 9999;
-        min-width: 220px;
-        background: #41acbc;
-        color: #fff;
-        border-radius: 6px;
-        padding: 14px 28px;
-        box-shadow: 0 2px 16px #41acbc33;
-        font-weight: 600;
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    ">
-        <i class="fas fa-check-circle" style="font-size:1.3em"></i>
-        {{ session('success') }}
-    </div>
-@endif
-
 <style>
     .teal-table th, .teal-table td { vertical-align: middle; }
     .btn-wow { background:#41acbc; border:none; color:#fff; border-radius:8px; }
@@ -341,11 +318,6 @@
 @push('scripts')
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
-      setTimeout(() => {
-          const msg = document.getElementById('flash-message');
-          if(msg) msg.style.display = 'none';
-      }, 5000);
-
         $(document).ready(function () {
             $('#changeRequestsTable').DataTable({
                 "columnDefs": [
