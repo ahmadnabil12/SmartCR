@@ -79,7 +79,7 @@
     .delayed-date   { background: #ff4d4f;  color: #fff; font-weight:600; border-radius:6px; padding:3px 10px;}
     .urgent-date    { background: #ff6e00;  color: #fff; font-weight:600; border-radius:6px; padding:3px 10px; }
     .important-date { background: #ffd700;  color: #333; font-weight:600; border-radius:6px; padding:3px 10px;}
-    .standard-date  { background: #52c41a;  color: #fff; font-weight:600; border-radius:6px; padding:3px 10px;}
+    .standard-date  { background: #4169e1;  color: #fff; font-weight:600; border-radius:6px; padding:3px 10px;}
     
 
       
@@ -190,11 +190,11 @@
               $diff = $today->diffInDays($needBy, false); // false = negative if past
               if ($diff < 0) {
                   // Delayed
-                  $bg = '#ff4d4f'; // Dark Red
+                  $bg = '#ff4d4f'; // Red
                   $label = 'Delayed';
               } elseif ($diff <= 10) {
                   // Urgent
-                  $bg = '#ff6e00'; // Red
+                  $bg = '#ff6e00'; // Orange
                   $label = 'Urgent';
               } elseif ($diff <= 20) {
                   // Important
@@ -202,7 +202,7 @@
                   $label = 'Important';
               } else {
                   // Standard
-                  $bg = '#52c41a'; // Green
+                  $bg = '4169e1'; // Blue  
                   $label = 'Standard';
               }
           @endphp

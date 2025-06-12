@@ -23,7 +23,7 @@
         .urgency-delayed   { background: #ff4d4f;  color: #fff; }
         .urgency-urgent    { background: #ff6e00;  color: #fff; }
         .urgency-important { background: #ffd700;  color: #333; }
-        .urgency-standard  { background: #52c41a;  color: #fff; }
+        .urgency-standard  { background: #4169e1;  color: #fff; }
         .urgency-badge {
             display: inline-block;
             width: 100%;
@@ -74,7 +74,7 @@
             <td align="center" style="background:#ffd700; color:#333; padding: 10px 0; border-radius: 8px; font-weight:bold;">
                 Important<br>{{ $importantCount }}
             </td>
-            <td align="center" style="background:#52c41a; color:#fff; padding: 10px 0; border-radius: 8px; font-weight:bold;">
+            <td align="center" style="background:#4169e1; color:#fff; padding: 10px 0; border-radius: 8px; font-weight:bold;">
                 Standard<br>{{ $standardCount }}
             </td>
         </tr>

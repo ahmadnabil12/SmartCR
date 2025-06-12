@@ -180,13 +180,13 @@
             </div>
             <!-- Standard -->
             <div class="col-xl-3 col-md-6 mb-3">
-                <div class="card shadow h-100 py-2" style="border-left:4px solid #52c41a; min-height:90px;">
+                <div class="card shadow h-100 py-2" style="border-left:4px solid #4169e1; min-height:90px;">
                     <div class="card-body d-flex align-items-center py-2 px-3" style="gap:8px;">
                         <span>
-                            <i class="fas fa-check" style="color:#52c41a; font-size:1.35rem;"></i>
+                            <i class="fas fa-check" style="color:#4169e1; font-size:1.35rem;"></i>
                         </span>
                         <div>
-                            <div style="color:#52c41a; font-size:.95rem; font-weight:700;">Standard</div>
+                            <div style="color:#4169e1; font-size:.95rem; font-weight:700;">Standard</div>
                             <div style="font-size:1.3rem; font-weight:600;">{{ $standardCount }}</div>
                         </div>
                     </div>
