@@ -139,7 +139,7 @@ class ChangeRequestController extends Controller
         }
 
         $changeRequest->delete();
-        return back()->with('success', 'CR deleted.');
+        return back()->with('success', 'CR deleted successfully.');
     }
 
     // Optional: View own CRs (can be used for implementor too)
