@@ -27,6 +27,26 @@
 @endphp
 
 @section('content')
+
+<!-- Breadcrumb -->
+<div class="row">
+    <div class="col">
+        <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('welcome') }}" style="color: #41acbc; font-weight: 500;">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('dashboard') }}" style="color: #41acbc; font-weight: 500;">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: #888;">
+                    Reports
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
 <div class="container mt-4">
     <h2 style="color:#41acbc;" class="fw-bold mb-4">
         <i class="fas fa-chart-bar me-2"></i>
