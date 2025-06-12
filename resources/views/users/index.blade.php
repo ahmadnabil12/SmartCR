@@ -63,8 +63,13 @@
 <div class="container mt-1">
     <div class="card p-4" style="border-radius: 1.2rem; box-shadow:0 8px 40px rgba(65,172,188,0.13); border:2px solid #d4f3f8;">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="fw-bold" style="color:#41acbc;">List of Users</h3>
-            <a href="{{ route('users.create') }}" class="btn btn-wow"><i class="fas fa-user-plus me-1"></i> Add User</a>
+            <h3 class="fw-bold" style="color:#41acbc;">
+                <i class="fas fa-users" style="margin-right:10px;"></i>
+                List of Users
+            </h3>
+            <a href="{{ route('users.create') }}" class="btn btn-wow">
+                <i class="fas fa-user-plus me-1"></i> Add User
+            </a>
         </div>
     
         <table class="table table-hover table-striped teal-table" id="usersTable">

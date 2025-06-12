@@ -111,7 +111,10 @@
               border: 2px solid #d4f3f8;">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3 class="fw-bold" style="color: #41acbc;">List of Change Requests</h3>
+        <h3 class="fw-bold" style="color: #41acbc;">
+            <i class="fas fa-file-alt" style="margin-right:10px;"></i>
+            List of Change Requests
+        </h3>
 
       <!-- Submit New CR button only for requestors -->
       @if ($user->role === 'requestor')
