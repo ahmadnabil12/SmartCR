@@ -161,7 +161,23 @@
 @endif
 
 <!-- Charts Row 1 -->
-@if(in_array(auth()->user()->role, ['hod', 'hou', 'implementor', 'admin']))
+@if(auth()->user()->role === 'requestor')
+    <!-- Only show status chart if there are CRs -->
+    @if(isset($statusChart) && $statusChart->isNotEmpty())
+    <div class="row">
+        <div class="col-xl-6 mb-4">
+            <div class="card shadow fade-in-card">
+                <div class="card-header bg-primary text-white">
+                    CR Status Distribution
+                </div>
+                <div class="card-body">
+                    <canvas id="statusDoughnutChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+@elseif(in_array(auth()->user()->role, ['hod', 'hou', 'implementor', 'admin']))
     @if((isset($statusChart) && $statusChart->isNotEmpty()) || (isset($complexityChart) && $complexityChart->isNotEmpty()))
     <div class="row">
         <!-- Status Chart -->
