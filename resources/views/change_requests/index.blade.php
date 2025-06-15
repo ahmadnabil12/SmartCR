@@ -78,7 +78,7 @@
     /* Status color coding */
     .delayed-date   { background: #ff4d4f;  color: #fff; font-weight:600; border-radius:6px; padding:3px 10px;}
     .urgent-date    { background: #ff6e00;  color: #fff; font-weight:600; border-radius:6px; padding:3px 10px; }
-    .important-date { background: #ffd700;  color: #333; font-weight:600; border-radius:6px; padding:3px 10px;}
+    .important-date { background: #ffbf00;  color: #333; font-weight:600; border-radius:6px; padding:3px 10px;}
     .standard-date  { background: #4169e1;  color: #fff; font-weight:600; border-radius:6px; padding:3px 10px;}
     
 
@@ -198,7 +198,7 @@
                 $bg = '#ff6e00';      // Orange for Urgent
                 $label = 'Urgent';
             } elseif ($diff <= 20) {
-                $bg = '#ffd700';      // Yellow for Important
+                $bg = '#ffbf00';      // Yellow for Important
                 $label = 'Important';
             } else {
                 $bg = '#4169e1';      // Blue for Standard

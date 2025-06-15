@@ -166,13 +166,13 @@
             </div>
             <!-- Important -->
             <div class="col-xl-3 col-md-6 mb-3">
-                <div class="card shadow h-100 py-2" style="border-left:4px solid #ffd700; min-height:90px;">
+                <div class="card shadow h-100 py-2" style="border-left:4px solid #ffbf00; min-height:90px;">
                     <div class="card-body d-flex align-items-center py-2 px-3" style="gap:8px;">
                         <span>
-                            <i class="fas fa-star" style="color:#ffd700; font-size:1.35rem;"></i>
+                            <i class="fas fa-star" style="color:#ffbf00; font-size:1.35rem;"></i>
                         </span>
                         <div>
-                            <div style="color:#ffd700; font-size:.95rem; font-weight:700;">Important</div>
+                            <div style="color:#ffbf00; font-size:.95rem; font-weight:700;">Important</div>
                             <div style="font-size:1.3rem; font-weight:600;">{{ $importantCount }}</div>
                         </div>
                     </div>

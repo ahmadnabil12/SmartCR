@@ -41,7 +41,7 @@
                     $bg = '#ff6e00'; // Orange - Urgent
                     $label = 'Urgent';
                 } elseif ($diff <= 20) {
-                    $bg = '#ffd700'; // Yellow - Important
+                    $bg = '#ffbf00'; // Yellow - Important
                     $label = 'Important';
                 } else {
                     $bg = '#4169e1'; // Blue - Standard
