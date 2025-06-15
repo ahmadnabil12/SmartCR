@@ -35,7 +35,7 @@
                     $bg = '#52c41a'; // Green for completed
                     $label = 'Completed';
                 } elseif ($diff < 0) {
-                    $bg = '#ff4d4f'; // Red - Delayed
+                    $bg = '#c00'; // Red - Delayed
                     $label = 'Delayed';
                 } elseif ($diff <= 10) {
                     $bg = '#ff6e00'; // Orange - Urgent

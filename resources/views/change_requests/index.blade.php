@@ -192,7 +192,7 @@
                 $bg = '#52c41a';      // Green for completed
                 $label = 'Completed';
             } elseif ($diff < 0) {
-                $bg = '#ff4d4f';      // Red for Delayed
+                $bg = '#c00';      // Red for Delayed
                 $label = 'Delayed';
             } elseif ($diff <= 10) {
                 $bg = '#ff6e00';      // Orange for Urgent

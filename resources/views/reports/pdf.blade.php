@@ -21,7 +21,7 @@
         .chart-img { display:block; margin: 18px auto; max-width: 360px; }
 
         .urgency-completed { background: #52c41a; color: #fff; }
-        .urgency-delayed   { background: #ff4d4f; color: #fff; }
+        .urgency-delayed   { background: #c00; color: #fff; }
         .urgency-urgent    { background: #ff6e00; color: #fff; }
         .urgency-important { background: #ffd700; color: #fff; }
         .urgency-standard  { background: #4169e1; color: #fff; }
@@ -66,7 +66,7 @@
     <!-- Status Breakdown (Date) -->
     <table width="100%" style="margin: 18px 0;">
         <tr>
-            <td align="center" style="background:#ff4d4f; color:#fff; padding: 10px 0; border-radius: 8px; font-weight:bold;">
+            <td align="center" style="background:#c00; color:#fff; padding: 10px 0; border-radius: 8px; font-weight:bold;">
                 Delayed<br>{{ $delayedCount }}
             </td>
             <td align="center" style="background:#ff6e00; color:#fff; padding: 10px 0; border-radius: 8px; font-weight:bold;">
