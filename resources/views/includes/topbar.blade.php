@@ -6,6 +6,23 @@
     <i class="fa fa-bars"></i>
 </button>
 
+  <!-- Center Logos -->
+  <div
+    class="d-flex align-items-center"
+    style="flex: 1; justify-content: center;"
+  >
+    <img
+      src="{{ asset('img/uniten_logo.png') }}"
+      alt="UNITEN Logo"
+      style="height: 60px; margin: 0 1rem;"
+    >
+    <img
+      src="{{ asset('img/ERP_Logo.gif') }}"
+      alt="ERP Logo"
+      style="height: 60px; margin: 0 1rem;"
+    >
+  </div>
+
 <!-- Topbar Search >
 <form
     class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">

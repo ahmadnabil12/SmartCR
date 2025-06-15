@@ -4,9 +4,9 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('welcome') }}">
         <!--div class="sidebar-brand-icon rotate-n-15"-->
-            <img src="{{ asset('img/SmartCR_Logo_only.png') }}" alt="" style="width:3rem; height:auto">
+            <img src="{{ asset('img/SmartCR_Logo_OnlyWhite.png') }}" alt="" style="width:4rem; height:auto">
         <!--/div-->
-        <div class="sidebar-brand-text mx-3">SmartCR</div>
+        <div class="sidebar-brand-text mx-1">SmartCR</div>
     </a>
 
     <!-- Divider -->
