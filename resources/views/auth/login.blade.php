@@ -28,12 +28,12 @@
                 <div class="col-md-5 d-none d-md-flex flex-column justify-content-center align-items-center"
                      style="background-color:#f1f3f5; padding:2rem;">
                   <img 
-                    src="{{ asset('img/SmartCR_Logo_Only.png') }}" 
+                    src="{{ asset('img/SmartCR_Logo_Only copy.png') }}" 
                     alt="SmartCR Logo" 
                     class="img-fluid" 
                     style="max-width:80%; max-height:200px;"
                   >
-                  <h2 class="logo-title mt-1">SmartCR</h2>
+                  <h2 class="logo-title ">SmartCR</h2>
                 </div>
 
                 {{-- RIGHT: The standard Laravel login form --}}
