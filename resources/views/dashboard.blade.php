@@ -160,88 +160,70 @@
 </div>
 @endif
 
-<!-- Charts Row 1 -->
-@if(auth()->user()->role === 'requestor')
-    <!-- Only show status chart if there are CRs -->
-    @if(isset($statusChart) && $statusChart->isNotEmpty())
-    <div class="row">
-        <div class="col-xl-6 mb-4">
-            <div class="card shadow fade-in-card">
-                <div class="card-header bg-primary text-white">
-                    CR Status Distribution
-                </div>
-                <div class="card-body">
-                    <canvas id="statusDoughnutChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endif
-@elseif(in_array(auth()->user()->role, ['hod', 'hou', 'implementor', 'admin']))
-    @if((isset($statusChart) && $statusChart->isNotEmpty()) || (isset($complexityChart) && $complexityChart->isNotEmpty()))
-    <div class="row">
-        <!-- Status Chart -->
-        @if(isset($statusChart) && $statusChart->isNotEmpty())
-        <div class="col-xl-6 mb-4">
-            <div class="card shadow fade-in-card">
-                <div class="card-header bg-primary text-white">
-                    CR Status Distribution
-                </div>
-                <div class="card-body">
-                    <canvas id="statusDoughnutChart"></canvas>
-                </div>
-            </div>
-        </div>
-        @endif
+<!-- === Dynamic Charts Display (No Holes!) === -->
+@php
+    $charts = [];
+    // Status chart is for everyone if available
+    if (isset($statusChart) && $statusChart->isNotEmpty()) {
+        $charts[] = [
+            'id' => 'statusDoughnutChart',
+            'header' => 'CR Status Distribution',
+            'headerClass' => 'bg-primary',
+            'cardClass' => 'fade-in-card',
+        ];
+    }
+    // Only show complexity for non-requestors
+    if (
+        isset($complexityChart) && $complexityChart->isNotEmpty() &&
+        in_array(auth()->user()->role, ['hod','hou','implementor','admin'])
+    ) {
+        $charts[] = [
+            'id' => 'complexityBarChart',
+            'header' => 'CR Complexity Distribution',
+            'headerClass' => 'bg-success',
+            'cardClass' => 'fade-in-card',
+        ];
+    }
+    if (isset($unitChart) && $unitChart->isNotEmpty()) {
+        $charts[] = [
+            'id' => 'unitBarChart',
+            'header' => 'CRs by Unit',
+            'headerClass' => 'bg-info',
+            'cardClass' => '',
+        ];
+    }
+    if (isset($completionChart) && $completionChart->isNotEmpty()) {
+        $charts[] = [
+            'id' => 'completionPieChart',
+            'header' => 'Completed vs Pending CRs',
+            'headerClass' => 'bg-warning',
+            'cardClass' => '',
+        ];
+    }
+@endphp
 
-        <!-- Complexity Chart -->
-        @if(isset($complexityChart) && $complexityChart->isNotEmpty())
+<!-- 2. Loop through charts, 2 per row -->
+@if(count($charts))
+    @foreach(array_chunk($charts, 2) as $rowCharts)
+    <div class="row mb-4">
+        @foreach($rowCharts as $chart)
         <div class="col-xl-6 mb-4">
-            <div class="card shadow fade-in-card">
-                <div class="card-header bg-success text-white">
-                    CR Complexity Distribution
+            <div class="card shadow {{ $chart['cardClass'] }}">
+                <!-- Chart Header (colored) -->
+                <div class="card-header text-white {{ $chart['headerClass'] }}">
+                    {{ $chart['header'] }}
                 </div>
-                <div class="card-body">
-                    <canvas id="complexityBarChart"></canvas>
+                <!---- Chart Canvas -->
+                <div class="card-body d-flex justify-content-center align-items-center">
+                    <canvas id="{{ $chart['id'] }}" width="500" height="500" style="max-width:500px;max-height:500px;"></canvas>
                 </div>
             </div>
         </div>
-        @endif
+        @endforeach
     </div>
-    @endif
+    @endforeach
 @endif
-
-<!-- Charts Row 2 -->
-<div class="row mb-4">
-    <!-- CRs by Unit – only for Requestor or HOD and when $unitChart has values -->
-    @if(in_array(auth()->user()->role, ['requestor','hod', 'admin']) 
-        && isset($unitChart) && $unitChart->isNotEmpty())
-        <div class="col-xl-6 mb-4">
-            <div class="card shadow">
-                <div class="card-header bg-info text-white">
-                    CRs by Unit
-                </div>
-                <div class="card-body">
-                    <canvas id="unitBarChart"></canvas>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    <!-- Completed vs Pending – for any role that has $completionChart -->
-    @if(isset($completionChart) && $completionChart->isNotEmpty())
-        <div class="col-xl-6 mb-4">
-            <div class="card shadow">
-                <div class="card-header bg-warning text-white">
-                    Completed vs Pending CRs
-                </div>
-                <div class="card-body">
-                    <canvas id="completionPieChart"></canvas>
-                </div>
-            </div>
-        </div>
-    @endif
-</div>
+<!-- End of Charts Row -->
 
 <!-- About SmartCR -->
 <div class="row">
