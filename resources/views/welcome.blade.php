@@ -11,24 +11,32 @@
     <style>
         body {
             font-family: 'Nunito', sans-serif;
-            background: #e0f2f1;    /* Light teal background */
+
+            /* full-screen cover background */
+            background: url('/img/digitalized_background.jpg') no-repeat center center;
+            background-size: cover;
+
+            /* optional color overlay if image fails or for a tint: */
+            /* background-color: #e0f2f1; */
+            
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            color: #00695c;          /* Darker teal text */
+            color: #00695c; /* adjust text color for contrast */
         }
 
         .container {
             text-align: center;
-            background: #ffffff;
+            background: #ffffff; /* slight white translucency */
             padding: 40px;
             border-radius: 12px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             max-width: 400px;
             width: 100%;
         }
+
 
         h1 {
             font-size: 26px;
@@ -87,7 +95,10 @@
 <body>
     <div class="container">
         <!-- Logo Image -->
-        <img src="/img/uniten_logo.png" alt="RGMS Logo" class="logo">
+        <div class="d-flex justify-content-center align-items-center mb-4" style="gap: 1.5rem;">
+            <img src="/img/uniten_logo.png"         alt="UNITEN Logo"   class="logo" style="max-height: 80px;">
+            <img src="/img/ERP_Logo.gif"            alt="ERP Logo"      class="logo" style="max-height: 80px;">
+        </div>
 
         <h1>Welcome to SmartCR Management System</h1>
 

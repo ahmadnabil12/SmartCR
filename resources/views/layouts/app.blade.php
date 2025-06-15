@@ -12,13 +12,24 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
-<body style="background: linear-gradient(135deg, #e3f2fd, #ede7f6); color: #1e88e5;">  <!-- Light blue and purple gradient background -->
+<body
+  style="
+    /* full-screen fixed background */
+    background: url('/img/digitalized_background.jpg') no-repeat center center fixed;
+    background-size: cover;
+
+    /* fallback text color--you can tweak for contrast */
+    color: #ffffff;
+  "
+>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm">  <!-- Dark blue navbar -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm" >  <!-- Dark blue navbar -->
             <div class="container">
                 <!-- Change the brand name to SmartCR -->
                 <a class="navbar-brand text-light" href="{{ url('/') }}">
