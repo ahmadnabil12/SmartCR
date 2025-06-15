@@ -3,9 +3,9 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('welcome') }}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-        </div>
+        <!--div class="sidebar-brand-icon rotate-n-15"-->
+            <img src="{{ asset('img/SmartCR_Logo_only.png') }}" alt="" style="width:3rem; height:auto">
+        <!--/div-->
         <div class="sidebar-brand-text mx-3">SmartCR</div>
     </a>
 
