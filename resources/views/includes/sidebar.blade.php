@@ -78,12 +78,14 @@
     @endif
 
     <!-- Nav Item - Reports -->
-    <li class="nav-item {{ request()->routeIs('reports.*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('reports.index') }}">
-            <i class="fas fa-chart-bar me-2"></i>
-            <span>Reports</span>
-        </a>
-    </li>
+    @if(auth()->user()->role === 'admin'|| auth()->user()->role === 'hod' || auth()->user()->role === 'hou')
+        <li class="nav-item {{ request()->routeIs('reports.*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('reports.index') }}">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span>Reports</span>
+            </a>
+        </li>
+    @endif
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
