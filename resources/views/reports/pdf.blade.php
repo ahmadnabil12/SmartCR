@@ -90,8 +90,13 @@
     <div style="margin-bottom: 18px; margin-top:8px;">
         <strong>Insights:</strong>
         <ul style="margin:0 0 0 18px; padding:0;">
-            <li>Most active unit: <strong>{{ $mostActiveUnit ?? '-' }}</strong></li>
+             <!-- Show 'Most Active Unit' only to HOD and Admin -->
+            @if(in_array(auth()->user()->role, ['hod', 'admin']))
+                <li>Most active unit: <strong>{{ $mostActiveUnit ?? '-' }}</strong></li>
+            @endif
+            <!-- Show 'Most Common Status' -->
             <li>Most common status: <strong>{{ $mostCommonStatus ?? '-' }}</strong></li>
+            <!-- Average Days from Submission to Need By -->
             <li>Average days from submission to Need By: <strong>
                 @if($changeRequests->count())
                     {{
@@ -103,6 +108,37 @@
                     N/A
                 @endif
             </strong></li>
+            <!-- Implementor with Most Delayed CRs -->
+            @php
+                $delayedByImpl = $changeRequests
+                    ->filter(fn($cr) => \Carbon\Carbon::parse($cr->need_by_date)->isPast() && $cr->status !== 'Completed')
+                    ->groupBy(fn($cr) => $cr->implementor->name ?? 'None')
+                    ->map(fn($group) => $group->count());
+                $maxDelayed = $delayedByImpl->max();
+                $mostDelayedImpl = $delayedByImpl->filter(fn($v) => $v === $maxDelayed && $maxDelayed > 0)->keys()->implode(', ');
+            @endphp
+            <li>
+                Implementor with most delayed CRs:
+                <strong>{{ $mostDelayedImpl ?: 'None' }}</strong>
+                @if($maxDelayed > 0)
+                    ({{ $maxDelayed }})
+                @endif
+            </li>
+            <!-- Implementor with Most Assigned CRs -->
+            @php
+                $assignedByImpl = $changeRequests
+                    ->groupBy(fn($cr) => $cr->implementor->name ?? 'None')
+                    ->map(fn($group) => $group->count());
+                $maxAssigned = $assignedByImpl->max();
+                $mostAssignedImpl = $assignedByImpl->filter(fn($v) => $v === $maxAssigned && $maxAssigned > 0)->keys()->implode(', ');
+            @endphp
+            <li>
+                Implementor with most assigned CRs:
+                <strong>{{ $mostAssignedImpl ?: 'None' }}</strong>
+                @if($maxAssigned > 0)
+                    ({{ $maxAssigned }})
+                @endif
+            </li>
         </ul>
     </div>
 
@@ -167,6 +203,37 @@
         </tbody>
     </table>
 
+    <!-- Completed CRs Table -->
+    @php
+        $completedCRs = $changeRequests->where('status', 'Completed')->sortByDesc('need_by_date')->take(5);
+    @endphp
+
+    @if($completedCRs->count())
+        <h4 class="mb-2">Recently Completed CRs</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Unit</th>
+                    <th>Need By</th>
+                    <th>Completed Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($completedCRs as $cr)
+                <tr>
+                    <td>{{ $cr->title }}</td>
+                    <td>{{ $cr->unit }}</td>
+                    <td>{{ \Carbon\Carbon::parse($cr->need_by_date)->format('d M Y') }}</td>
+                    <td>
+                        {{ $cr->updated_at ? \Carbon\Carbon::parse($cr->updated_at)->format('d M Y') : '-' }}
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    @endif
+    
     <!-- Top Delayed CRs -->
     @php
         $delayedCRs = $changeRequests->filter(function($cr){
