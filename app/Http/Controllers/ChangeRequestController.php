@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ChangeRequest;
 use App\Models\User;
+use App\Models\Notification;
 use App\Notifications\NewCRAssigned;
 
 class ChangeRequestController extends Controller
@@ -71,6 +72,38 @@ class ChangeRequestController extends Controller
             $implementor->notify(new NewCRAssigned($cr));
         }
 
+            // --- SYSTEM NOTIFICATIONS (add below) ---
+
+        // 1. Implementor gets system notification too
+        \App\Models\Notification::create([
+            'user_id' => $implementor->id,
+            'type'    => 'new_cr_assigned',
+            'message' => "A new CR ('{$cr->title}') has been assigned to you.",
+            'is_read' => false,
+        ]);
+
+        // 2. HOU for this unit (if any)
+        $hou = \App\Models\User::where('role', 'hou')->where('unit', $cr->unit)->first();
+        if ($hou) {
+            \App\Models\Notification::create([
+                'user_id' => $hou->id,
+                'type'    => 'new_cr_in_unit',
+                'message' => "A new CR ('{$cr->title}') was submitted for your unit.",
+                'is_read' => false,
+            ]);
+        }
+
+        // 3. All HODs (usually one, but support multiple if your org ever expands)
+        $hods = \App\Models\User::where('role', 'hod')->get();
+        foreach ($hods as $hod) {
+            \App\Models\Notification::create([
+                'user_id' => $hod->id,
+                'type'    => 'new_cr_in_department',
+                'message' => "A new CR ('{$cr->title}') was submitted.",
+                'is_read' => false,
+            ]);
+        }
+
         return redirect()->route('change-requests.index')->with('success', 'CR submitted and implementor notified.');
     }
 
@@ -126,7 +159,19 @@ class ChangeRequestController extends Controller
                 'comment' => 'nullable|string',
             ]);
 
+            // Store previous status to check for change
+            $oldStatus = $changeRequest->status;
             $changeRequest->update($request->only('status', 'complexity', 'comment'));
+
+            // Notify the requestor if status has changed
+            if ($oldStatus !== $request->status) {
+                Notification::create([
+                    'user_id' => $changeRequest->requestor_id,
+                    'type'    => 'cr_status_changed',
+                    'message' => "Your Change Request ('{$changeRequest->title}') status changed to '{$request->status}'.",
+                    'is_read' => false,
+                ]);
+            }
         }
 
         return redirect()->route('change-requests.index')->with('success', 'CR updated successfully.');

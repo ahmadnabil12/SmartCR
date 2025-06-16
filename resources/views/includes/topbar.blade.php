@@ -23,37 +23,6 @@
     >
   </div>
 
-<!-- Topbar Search >
-<form
-    class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-    <div class="input-group">
-        <!- Disabled input field >
-        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-            aria-label="Search" aria-describedby="basic-addon2" disabled>
-        <div class="input-group-append">
-            <!- Disabled button >
-            <button class="btn" type="button" disabled style="background-color: rgb(65, 172, 188); border-color: rgb(65, 172, 188); color: #fff;">
-                <i class="fas fa-search fa-sm"></i></i>
-            </button>
-        </div>
-    </div>
-</form-->
-
-
-<!-- Can Search-->
-<!--form
-    class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-    <div class="input-group">
-        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-            aria-label="Search" aria-describedby="basic-addon2">
-        <div class="input-group-append">
-            <button class="btn btn-primary" type="button">
-                <i class="fas fa-search fa-sm"></i>
-            </button>
-        </div>
-    </div>
-</form-->
-
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 
@@ -79,43 +48,41 @@
                 </div>
             </form>
         </div>
-    </li>
+    </li-->
 
-    <!- Nav Item - Alerts ->
+    <!-- Nav Item - Alerts -->
     <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" aria-expanded="false">
-
-            <!- can click ->
-        <!- a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"->
-            
+        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-bell fa-fw"></i>
-            <!- Counter - Alerts ->
-            <span class="badge badge-danger badge-counter">3+</span>
+            @if(isset($unreadCount) && $unreadCount)
+                <span class="badge badge-danger badge-counter">{{ $unreadCount > 3 ? '3+' : $unreadCount }}</span>
+            @endif
         </a>
-        <!- Dropdown - Alerts ->
         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-            aria-labelledby="alertsDropdown">
-            <h6 class="dropdown-header">
-                Alerts Center
-            </h6>
-            <!- Example alert ->
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                        <i class="fas fa-file-alt text-white"></i>
+            aria-labelledby="alertsDropdown" style="min-width: 350px;">
+            <div class="card-header text-white" style="background-color: #41acbc;">
+                <strong>ALERTS CENTER</strong>
+            </div>
+            @forelse($notifications ?? [] as $note)
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                    <div class="mr-3">
+                        <div class="icon-circle" style="background-color:#41acbc;">
+                            <i class="fas fa-file-alt text-white"></i>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <div class="small text-gray-500">December 12, 2019</div>
-                    <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                </div>
-            </a>
-            <!- Add more alerts as needed ->
+                    <div>
+                        <div class="small text-gray-500">{{ $note->created_at->format('d M Y H:i') }}</div>
+                        <span class="font-weight-bold">{{ $note->message }}</span>
+                    </div>
+                </a>
+            @empty
+                <div class="dropdown-item text-center small text-gray-500">No alerts</div>
+            @endforelse
         </div>
     </li>
 
-    <!- Nav Item - Messages ->
+    <!-- Nav Item - Messages ->
     <li class="nav-item dropdown no-arrow mx-1">
         <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" aria-expanded="false">
 
