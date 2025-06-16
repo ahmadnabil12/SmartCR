@@ -56,6 +56,7 @@
         </div>
         <div class="mb-3 text-center">
             <button type="submit" class="btn btn-wow"><i class="fas fa-save me-1"></i> Update User</button>
+            <a href="{{ route('users.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
         </div>
     </form>
 </div>

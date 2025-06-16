@@ -112,12 +112,12 @@
                     </td>
                     <td>{{ $user->unit ?? '-' }}</td>
                     <td>
-                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-wow btn-sm me-1"><i class="fas fa-eye"></i></a>
                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-edit btn-sm me-1"><i class="fas fa-edit"></i></a>
                         <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn btn-delete btn-sm" onclick="return confirm('Delete this user?');"><i class="fas fa-trash"></i></button>
                         </form>
+                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-wow btn-sm me-1"><i class="fas fa-eye"></i></a>
                     </td>
                 </tr>
                 @endforeach
