@@ -215,7 +215,7 @@
                 </div>
                 <!---- Chart Canvas -->
                 <div class="card-body d-flex justify-content-center align-items-center">
-                    <canvas id="{{ $chart['id'] }}" width="500" height="500" style="max-width:500px;max-height:500px;"></canvas>
+                    <canvas id="{{ $chart['id'] }}" width="400" height="400" style="max-width:400px;max-height:400px; display:block; margin:auto;"></canvas>
                 </div>
             </div>
         </div>
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const text = `Total CR: ${totalCR}`;
 
             ctx.save();
-            ctx.font         = '20px Nunito, sans-serif';
+            ctx.font         = '18px Nunito, sans-serif';
             ctx.fillStyle    = '#333';
             ctx.textAlign    = 'center';
             ctx.textBaseline = 'middle';
@@ -433,20 +433,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 scales: {
                     x: {
                         ticks: {
-                            callback: function(value) {
-                                const label = this.getLabelForValue(value);
-                                return label.length > 20 ? label.match(/.{1,20}/g) : label;
-                            },
                             color: '#333',
                             maxRotation: 0,
-                            autoSkip: false
+                            minRotation: 0,
+                            autoSkip: false,
+                            font: {
+                                size: 13
+                            },
+                            callback: function(value) {
+                                // Split label by spaces, so each word goes to a new line
+                                const label = this.getLabelForValue(value);
+                                return label ? label.split(' ') : label;
+                            }
                         }
                     },
                     y: {
                         beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
+                        ticks: { stepSize: 1 }
                     }
                 }
             }
