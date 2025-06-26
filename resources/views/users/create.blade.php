@@ -45,6 +45,10 @@
         </div>
         <div class="mb-3 text-center">
             <button type="submit" class="btn btn-wow"><i class="fas fa-plus-circle me-1"></i> Create User</button>
+            <a href="{{ route('users.index') }}"
+                   class="btn btn-secondary btn-sm">
+                    Cancel
+                </a>
         </div>
     </form>
 </div>

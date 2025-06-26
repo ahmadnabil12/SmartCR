@@ -91,7 +91,7 @@
             <!-- Action Buttons -->
             <div class="mt-4 d-flex justify-content-center gap-3">
                 <!-- Edit button if they can edit -->
-                @if(in_array($user->role, ['implementor','hou','hod','requestor']))
+                @if(in_array($user->role, ['implementor','requestor', 'admin']))
                     <a href="{{ route('change-requests.edit', $changeRequest->id) }}"
                        class="btn btn-wow btn-sm">
                         <i class="fas fa-edit"></i> Edit
